@@ -14,6 +14,37 @@ detail, motion behavior, texture realism, pacing, and cinematic tone.
 
 - `README.md` - core workflow + reusable master prompt template
 - `CUSTOMER_VISION_INTAKE_FORM.md` - customer-facing form to capture vision
+- `index.html` - browser app for intake + automatic prompt package generation
+- `styles.css` - web app styling
+- `app.js` - intake processing and prompt blueprint generation logic
+
+## Launch the website app
+
+### Option A: open directly
+
+Open `index.html` in your browser.
+
+### Option B: run a local server (recommended)
+
+```bash
+python3 -m http.server 8080
+```
+
+Then visit:
+
+```text
+http://localhost:8080
+```
+
+In the app:
+
+1. Fill the intake form (or click "Load Demo Data")
+2. Click "Generate Prompt Package"
+3. Copy or download:
+   - cleaned client brief
+   - ready-to-run filled prompt
+   - reusable master template
+   - concept direction starters
 
 ## Workflow
 

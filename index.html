@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Renderment Prompt Blueprint Builder</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <div class="hero-inner">
+        <p class="eyebrow">Renderment Studio Tool</p>
+        <h1>Prompt Blueprint Builder</h1>
+        <p class="subtitle">
+          Capture a client vision and generate production-ready prompt blueprints
+          for cinematic video, image, and 3D creative pipelines.
+        </p>
+      </div>
+    </header>
+
+    <main class="page">
+      <section class="panel">
+        <h2>How to use this app</h2>
+        <ol>
+          <li>Fill out the intake form below (or click "Load Demo Data").</li>
+          <li>Click "Generate Prompt Package".</li>
+          <li>
+            Copy the outputs into ChatGPT/Claude/Cursor to produce concepts and
+            scene-ready prompts.
+          </li>
+        </ol>
+        <div class="action-row">
+          <button id="loadDemoBtn" type="button" class="button secondary">
+            Load Demo Data
+          </button>
+          <button id="clearFormBtn" type="button" class="button ghost">
+            Clear Form
+          </button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Customer Vision Intake</h2>
+        <form id="intakeForm">
+          <fieldset>
+            <legend>1) Basic Project Information</legend>
+            <div class="grid two">
+              <label>
+                Brand / Company Name
+                <input id="brandName" type="text" />
+              </label>
+              <label>
+                Contact Name + Role
+                <input id="contactName" type="text" />
+              </label>
+              <label>
+                Contact Email
+                <input id="contactEmail" type="email" />
+              </label>
+              <label>
+                Project / Campaign Name
+                <input id="projectName" type="text" />
+              </label>
+              <label>
+                Launch Window
+                <input id="launchWindow" type="text" />
+              </label>
+              <label>
+                Budget Range
+                <input id="budgetRange" type="text" />
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>2) Deliverables and Channels</legend>
+            <div class="checkbox-grid">
+              <label><input id="dCinematicVideo" data-group="deliverables" data-label="Cinematic AI video" type="checkbox" /> Cinematic AI video</label>
+              <label><input id="dUltraImage" data-group="deliverables" data-label="Ultra-detailed AI images" type="checkbox" /> Ultra-detailed AI images</label>
+              <label><input id="dStylized3d" data-group="deliverables" data-label="Stylized 3D visuals" type="checkbox" /> Stylized 3D visuals</label>
+              <label><input id="dMixedCampaign" data-group="deliverables" data-label="Mixed campaign (video + image + 3D)" type="checkbox" /> Mixed campaign</label>
+              <label><input id="dShortVertical" data-group="deliverables" data-label="9:16 short-form" type="checkbox" /> 9:16 short-form</label>
+              <label><input id="dHorizontalVideo" data-group="deliverables" data-label="16:9 horizontal video" type="checkbox" /> 16:9 horizontal video</label>
+              <label><input id="dSquareCut" data-group="deliverables" data-label="1:1 social cut" type="checkbox" /> 1:1 social cut</label>
+              <label><input id="dProductStills" data-group="deliverables" data-label="Product stills" type="checkbox" /> Product stills</label>
+              <label><input id="d3dFrames" data-group="deliverables" data-label="3D hero frames" type="checkbox" /> 3D hero frames</label>
+              <label><input id="dAdVariations" data-group="deliverables" data-label="Ad variations/cutdowns" type="checkbox" /> Ad variations/cutdowns</label>
+            </div>
+            <label>
+              Exact Deliverable List and Quantity
+              <textarea id="deliverableQuantity" rows="3"></textarea>
+            </label>
+            <label>
+              Platform(s)
+              <input
+                id="platformList"
+                type="text"
+                placeholder="TikTok, Reels, YouTube Shorts, YouTube, landing page, paid ads"
+              />
+            </label>
+          </fieldset>
+
+          <fieldset>
+            <legend>3) Campaign Goal and Brand Context</legend>
+            <div class="grid two">
+              <label>
+                Main Objective
+                <input id="goalObjective" type="text" />
+              </label>
+              <label>
+                KPI / Success Signal
+                <input id="kpis" type="text" />
+              </label>
+              <label>
+                Primary CTA
+                <input id="cta" type="text" />
+              </label>
+              <label>
+                Next Destination (where the audience should go)
+                <input id="nextStep" type="text" />
+              </label>
+              <label>
+                Target Audience
+                <input id="targetAudience" type="text" />
+              </label>
+              <label>
+                Region / Language
+                <input id="regionLanguage" type="text" />
+              </label>
+              <label>
+                Brand Personality (3-5 words)
+                <input id="brandPersonality" type="text" />
+              </label>
+              <label>
+                Campaign Tone
+                <input id="campaignTone" type="text" />
+              </label>
+            </div>
+            <label>
+              Emotions to Trigger
+              <input id="viewerEmotions" type="text" />
+            </label>
+          </fieldset>
+
+          <fieldset>
+            <legend>4) Product and Message</legend>
+            <div class="grid two">
+              <label>
+                Product / Service
+                <input id="productService" type="text" />
+              </label>
+              <label>
+                Core Message
+                <input id="coreMessage" type="text" />
+              </label>
+            </div>
+            <label>
+              Top Value Points (one per line)
+              <textarea id="topValuePoints" rows="3"></textarea>
+            </label>
+            <label>
+              Claims that must be included
+              <textarea id="claimsInclude" rows="2"></textarea>
+            </label>
+            <label>
+              Claims or topics to avoid
+              <textarea id="claimsAvoid" rows="2"></textarea>
+            </label>
+          </fieldset>
+
+          <fieldset>
+            <legend>5) Visual Style Direction</legend>
+            <div class="checkbox-grid">
+              <label><input id="sCinematic8k" data-group="styleFamily" data-label="Cinematic 8K ad style" type="checkbox" /> Cinematic 8K ad style</label>
+              <label><input id="sHyperReal" data-group="styleFamily" data-label="Hyper-real product showcase" type="checkbox" /> Hyper-real product showcase</label>
+              <label><input id="sPixar3d" data-group="styleFamily" data-label="Pixar-style 3D animation" type="checkbox" /> Pixar-style 3D animation</label>
+              <label><input id="sCartoonReal" data-group="styleFamily" data-label="Cartoon-to-real transformation" type="checkbox" /> Cartoon-to-real transformation</label>
+              <label><input id="sPov" data-group="styleFamily" data-label="Handheld POV social ad" type="checkbox" /> Handheld POV ad</label>
+              <label><input id="sVlog" data-group="styleFamily" data-label="Vlog-style creator ad" type="checkbox" /> Vlog creator ad</label>
+              <label><input id="sTech" data-group="styleFamily" data-label="Futuristic tech aesthetic" type="checkbox" /> Futuristic tech aesthetic</label>
+              <label><input id="sLuxury" data-group="styleFamily" data-label="Minimal luxury commercial look" type="checkbox" /> Minimal luxury look</label>
+            </div>
+            <label>
+              Reference Links or Mood Notes
+              <textarea id="referenceLinks" rows="3"></textarea>
+            </label>
+            <label>
+              Non-negotiable Visual Elements
+              <textarea id="nonNegotiables" rows="2"></textarea>
+            </label>
+          </fieldset>
+
+          <fieldset>
+            <legend>6) Camera, Lighting, Environment, Motion</legend>
+            <div class="grid two">
+              <label>
+                Shot Styles
+                <input id="shotStyles" type="text" placeholder="macro, close-up, overhead, orbit" />
+              </label>
+              <label>
+                Camera Movement
+                <input id="cameraMovement" type="text" placeholder="slow dolly, handheld, kinetic" />
+              </label>
+              <label>
+                Lens Feel
+                <input id="lensFeel" type="text" placeholder="24mm wide, 50mm portrait, macro" />
+              </label>
+              <label>
+                Depth of Field Preference
+                <input id="dofPreference" type="text" placeholder="deep focus, shallow bokeh, mixed" />
+              </label>
+              <label>
+                Pacing Preference
+                <input id="pacingPreference" type="text" />
+              </label>
+              <label>
+                Lighting Mood
+                <input id="lightingMood" type="text" />
+              </label>
+              <label>
+                Color Temperature
+                <input id="colorTemperature" type="text" />
+              </label>
+              <label>
+                Environment / Location
+                <input id="environmentLocation" type="text" />
+              </label>
+              <label>
+                Atmosphere
+                <input id="atmosphere" type="text" />
+              </label>
+              <label>
+                Texture Realism Target
+                <input id="textureRealism" type="text" />
+              </label>
+              <label>
+                Story Structure
+                <input id="storyStructure" type="text" />
+              </label>
+              <label>
+                Motion Behavior
+                <input id="motionBehavior" type="text" />
+              </label>
+            </div>
+            <label>
+              Key Moments that must happen
+              <textarea id="keyMoments" rows="2"></textarea>
+            </label>
+            <label>
+              Preferred Ending Beat
+              <input id="endingBeat" type="text" />
+            </label>
+          </fieldset>
+
+          <fieldset>
+            <legend>7) Audio and Technical Specs</legend>
+            <div class="grid two">
+              <label>
+                Music Style / Mood
+                <input id="musicStyle" type="text" />
+              </label>
+              <label>
+                Voiceover Needed
+                <select id="voiceoverNeeded">
+                  <option value="">Select</option>
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+                  <option value="Maybe">Maybe</option>
+                </select>
+              </label>
+              <label>
+                Voiceover Specs (if any)
+                <input id="voiceoverSpecs" type="text" />
+              </label>
+              <label>
+                Sound Design Style
+                <input id="soundDesign" type="text" />
+              </label>
+              <label>
+                Music Licensing Constraints
+                <input id="musicConstraints" type="text" />
+              </label>
+              <label>
+                Aspect Ratios
+                <input id="aspectRatios" type="text" />
+              </label>
+              <label>
+                Resolution Target
+                <input id="resolutionTarget" type="text" />
+              </label>
+              <label>
+                Frame Rate
+                <input id="frameRate" type="text" />
+              </label>
+              <label>
+                Max Runtime by Platform
+                <input id="maxRuntime" type="text" />
+              </label>
+              <label>
+                Caption / Subtitle Requirements
+                <input id="captionReqs" type="text" />
+              </label>
+            </div>
+            <label>
+              Safe Zone or Branding Placement Constraints
+              <textarea id="safeZones" rows="2"></textarea>
+            </label>
+          </fieldset>
+
+          <fieldset>
+            <legend>8) Constraints, Assets, Workflow</legend>
+            <label>
+              Must Include (one per line)
+              <textarea id="mustInclude" rows="3"></textarea>
+            </label>
+            <label>
+              Must Avoid (one per line)
+              <textarea id="mustAvoid" rows="3"></textarea>
+            </label>
+            <label>
+              Compliance / Legal Constraints
+              <textarea id="legalConstraints" rows="2"></textarea>
+            </label>
+            <div class="checkbox-grid">
+              <label><input id="aPhotos" data-group="assets" data-label="Product photos" type="checkbox" /> Product photos</label>
+              <label><input id="aVideos" data-group="assets" data-label="Product videos" type="checkbox" /> Product videos</label>
+              <label><input id="aModels" data-group="assets" data-label="3D models" type="checkbox" /> 3D models</label>
+              <label><input id="aGuidelines" data-group="assets" data-label="Brand guidelines" type="checkbox" /> Brand guidelines</label>
+              <label><input id="aLogos" data-group="assets" data-label="Logos" type="checkbox" /> Logos</label>
+              <label><input id="aFonts" data-group="assets" data-label="Fonts" type="checkbox" /> Fonts</label>
+              <label><input id="aExistingAds" data-group="assets" data-label="Existing ads" type="checkbox" /> Existing ads</label>
+              <label><input id="aVoiceSamples" data-group="assets" data-label="Voiceover samples" type="checkbox" /> Voiceover samples</label>
+              <label><input id="aMusicRefs" data-group="assets" data-label="Music references" type="checkbox" /> Music references</label>
+              <label><input id="aScript" data-group="assets" data-label="Script copy" type="checkbox" /> Script copy</label>
+            </div>
+            <label>
+              Asset Links / Folder Paths
+              <textarea id="assetLinks" rows="2"></textarea>
+            </label>
+            <div class="grid two">
+              <label>
+                Decision-maker
+                <input id="decisionMaker" type="text" />
+              </label>
+              <label>
+                Review Rounds Expected
+                <input id="reviewRounds" type="text" />
+              </label>
+              <label>
+                Internal Review Timeline
+                <input id="reviewTimeline" type="text" />
+              </label>
+              <label>
+                Final Sign-off Date
+                <input id="finalSignoff" type="text" />
+              </label>
+              <label>
+                Priority Level
+                <select id="priorityLevel">
+                  <option value="">Select</option>
+                  <option value="Standard">Standard</option>
+                  <option value="Rush">Rush</option>
+                  <option value="Critical">Critical</option>
+                </select>
+              </label>
+              <label>
+                Number of Concept Directions
+                <input id="numberOfConcepts" type="number" min="1" max="10" value="3" />
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>9) One-Paragraph Vision</legend>
+            <label>
+              Vision Paragraph (4-8 sentences)
+              <textarea id="visionParagraph" rows="4"></textarea>
+            </label>
+          </fieldset>
+
+          <div class="action-row">
+            <button id="generateBtn" type="submit" class="button primary">
+              Generate Prompt Package
+            </button>
+            <button id="downloadBtn" type="button" class="button secondary">
+              Download as Markdown
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <section class="panel">
+        <h2>Generated Output</h2>
+        <p class="hint">
+          These outputs are copy-ready for your AI assistant and internal
+          production docs.
+        </p>
+
+        <article class="output-card">
+          <div class="output-header">
+            <h3>Cleaned Client Brief</h3>
+            <button class="button ghost copy-btn" data-target="cleanedBriefOutput" type="button">
+              Copy
+            </button>
+          </div>
+          <pre id="cleanedBriefOutput" class="output"></pre>
+        </article>
+
+        <article class="output-card">
+          <div class="output-header">
+            <h3>Ready-to-Run Filled Prompt</h3>
+            <button class="button ghost copy-btn" data-target="readyPromptOutput" type="button">
+              Copy
+            </button>
+          </div>
+          <pre id="readyPromptOutput" class="output"></pre>
+        </article>
+
+        <article class="output-card">
+          <div class="output-header">
+            <h3>Reusable Master Prompt Template</h3>
+            <button class="button ghost copy-btn" data-target="templateOutput" type="button">
+              Copy
+            </button>
+          </div>
+          <pre id="templateOutput" class="output"></pre>
+        </article>
+
+        <article class="output-card">
+          <div class="output-header">
+            <h3>Concept Direction Starters (Optional)</h3>
+            <button class="button ghost copy-btn" data-target="conceptSeedsOutput" type="button">
+              Copy
+            </button>
+          </div>
+          <pre id="conceptSeedsOutput" class="output"></pre>
+        </article>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>
+        Renderment Prompt Blueprint Builder - local web app for intake to
+        prompt-generation workflow.
+      </p>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>
