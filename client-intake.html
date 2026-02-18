@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Renderment Customer Intake Form</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <div class="container">
+        <p class="eyebrow">Renderment</p>
+        <h1>Customer Vision Intake Form</h1>
+        <p class="subtitle">
+          Fill this form to share your vision. This captures all key creative
+          inputs needed for scene-by-scene image and video prompt generation.
+        </p>
+      </div>
+    </header>
+
+    <main class="container layout">
+      <section class="card">
+        <h2>Project Details</h2>
+        <p class="muted">
+          Please complete as much as possible. Short answers are okay.
+        </p>
+
+        <form id="customerIntakeForm" class="form-grid">
+          <label>
+            Brand / Company Name
+            <input id="clientName" type="text" placeholder="Your brand name" />
+          </label>
+
+          <label>
+            Project Name
+            <input id="projectName" type="text" placeholder="Campaign or project title" />
+          </label>
+
+          <label>
+            Product / Service / Subject
+            <input id="productName" type="text" placeholder="What are we creating visuals for?" />
+          </label>
+
+          <label>
+            Main Goal
+            <input id="goal" type="text" placeholder="Conversions, awareness, installs, etc." />
+          </label>
+
+          <label>
+            Target Audience
+            <input id="audience" type="text" placeholder="Who should this content reach?" />
+          </label>
+
+          <label>
+            Platform(s)
+            <input id="platforms" type="text" placeholder="TikTok, Reels, Shorts, Meta Ads, etc." />
+          </label>
+
+          <label>
+            Creative Category
+            <select id="category">
+              <option value="viral_hook">Funny AI Intro / Viral Hook</option>
+              <option value="hyper_product">Hyper-Real Product</option>
+              <option value="pixar_3d">Pixar-Style 3D Animation</option>
+              <option value="app_brand">Cinematic App/Brand Ad</option>
+              <option value="gallery_showcase">Gallery-Style Showcase</option>
+              <option value="social_shortform">Social Short-Form Optimized</option>
+              <option value="custom">Custom / Hybrid</option>
+            </select>
+          </label>
+
+          <label>
+            Desired Video Length (seconds)
+            <input id="durationSeconds" type="number" min="3" max="60" value="8" />
+          </label>
+
+          <label>
+            Tone
+            <input id="tone" type="text" placeholder="Cinematic, funny, premium, emotional, etc." />
+          </label>
+
+          <label>
+            Visual Style
+            <input id="style" type="text" placeholder="Hyper-real, stylized 3D, handheld POV, etc." />
+          </label>
+
+          <label>
+            Camera Direction
+            <input id="camera" type="text" placeholder="Lens, framing, and camera movement notes" />
+          </label>
+
+          <label>
+            Lighting Direction
+            <input id="lighting" type="text" placeholder="Soft daylight, moody contrast, studio, etc." />
+          </label>
+
+          <label>
+            Environment Direction
+            <input id="environment" type="text" placeholder="Studio, urban street, gallery, abstract world, etc." />
+          </label>
+
+          <label>
+            Motion / Pacing
+            <input id="motion" type="text" placeholder="Fast, smooth, cinematic, energetic, etc." />
+          </label>
+
+          <label>
+            CTA (Call to Action)
+            <input id="cta" type="text" placeholder="Shop now, download app, book now, etc." />
+          </label>
+
+          <label class="full">
+            Must Include
+            <textarea id="mustInclude" rows="2" placeholder="Logo lockup, specific product angle, claim text, brand colors, etc."></textarea>
+          </label>
+
+          <label class="full">
+            Attach Reference Images (from your device / Downloads)
+            <input id="mustIncludeImages" type="file" multiple accept="image/*" />
+            <span class="field-note">
+              Select any reference images you want the team to follow.
+            </span>
+          </label>
+
+          <div id="imageAttachmentList" class="attachment-list full">
+            No reference images selected.
+          </div>
+
+          <label class="full">
+            Attach Additional Files (optional)
+            <input
+              id="mustIncludeAttachments"
+              type="file"
+              multiple
+              accept=".png,.jpg,.jpeg,.webp,.gif,.mp4,.mov,.pdf,.svg,.obj,.fbx,.glb,.gltf,.usd,.usdz,.blend,.zip"
+            />
+            <span class="field-note">
+              Optional: logos, brand kits, docs, 3D files, or other references.
+            </span>
+          </label>
+
+          <div id="attachmentList" class="attachment-list full">
+            No additional files selected.
+          </div>
+
+          <label class="full">
+            Attachment Links (Drive/Dropbox/Figma/etc.)
+            <input id="attachmentLinks" type="text" placeholder="Paste links to folders or files" />
+          </label>
+
+          <label class="full">
+            Must Avoid
+            <textarea id="mustAvoid" rows="2" placeholder="Any things to avoid in final output"></textarea>
+          </label>
+
+          <label class="full">
+            Vision Summary
+            <textarea id="vision" rows="3" placeholder="Describe how you want the final result to feel on screen"></textarea>
+          </label>
+
+          <div class="actions full">
+            <button id="copySubmissionBtn" type="button" class="btn primary">
+              Copy Submission
+            </button>
+            <button id="downloadSubmissionBtn" type="button" class="btn">
+              Download Submission
+            </button>
+            <button id="clearFormBtn" type="button" class="btn ghost">
+              Clear
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2>Submission Preview</h2>
+        <p class="muted">
+          This text can be copied or downloaded and sent back to Renderment.
+        </p>
+        <pre id="submissionPreview" class="output"></pre>
+      </section>
+    </main>
+
+    <script src="client-intake.js"></script>
+  </body>
+</html>

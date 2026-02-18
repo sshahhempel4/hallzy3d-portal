@@ -25,6 +25,8 @@ and the final master prompt to keep custom elements traceable.
 ## Files
 
 - `index.html` - simple client intake + one output box
+- `client-intake.html` - customer-friendly intake form only (shareable)
+- `client-intake.js` - customer form copy/download logic
 - `styles.css` - clean UI styling
 - `app.js` - prompt generation logic
 - `RENDERMENT_CREATIVE_WORKFLOW_DATASET.md` - full Renderment dataset reference
@@ -40,6 +42,12 @@ Open:
 
 ```text
 http://localhost:8080
+```
+
+Customer-shareable form page:
+
+```text
+http://localhost:8080/client-intake.html
 ```
 
 ## App flow
