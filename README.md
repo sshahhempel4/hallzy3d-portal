@@ -26,6 +26,7 @@ This is a **resource pack shader override** using Minecraft Java's built-in shad
 After build, use:
 
 - `Hallzy_VanillaShader_Java_1.21.11.zip`
+- `Hallzy_VanillaShader_Java_1.21.11_hotfix1.zip` (same contents, cache-busting filename)
 
 ## Install on MacBook (macOS, Java Edition)
 
