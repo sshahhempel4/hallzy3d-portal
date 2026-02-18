@@ -45,6 +45,7 @@ In the app:
 3. Click "Generate Prompt Package"
 4. Copy or download:
    - one-click full refined prompt (single copy box)
+   - ordered prompt stack (image keyframes first, then full 8s video prompts)
    - cleaned client brief
    - ready-to-run filled prompt
    - reusable master template

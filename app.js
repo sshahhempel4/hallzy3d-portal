@@ -1155,6 +1155,99 @@ OUTPUT FORMAT (STRICT)
    - 3 concise bullets for implementation (pacing, clarity, and conversion impact).`;
 }
 
+function buildOrderedPromptStack(data) {
+  const styleDNA =
+    data.styleFamily === "None selected" ? data.campaignTone : data.styleFamily;
+  const valueBullets = splitList(data.topValuePoints).join("; ");
+  const keyMoments = splitList(data.keyMoments).join("; ");
+  const negativePrompt =
+    "blurry details, low-resolution textures, warped logos, incorrect product label text, extra fingers, deformed anatomy, inconsistent lighting direction, oversaturated colors, muddy shadows, artifacting, duplicate objects, cropped product edges";
+
+  return `ORDERED PRODUCTION PROMPT STACK (IMAGES FIRST -> VIDEO SECOND)
+TARGET MASTER LENGTH: 8 seconds
+
+Use this exact order so the image keyframes establish look/continuity first,
+then video generation uses those frames for the full 8-second sequence.
+
+PROJECT LOCK
+- Product/Subject: ${data.productService}
+- Goal: ${data.goalObjective}
+- Platforms: ${data.platformList}
+- Category preset: ${data.categoryName}
+- Style DNA: ${styleDNA}
+- Camera direction: ${buildCameraDirection(data)}
+- Lighting direction: ${buildLightingDirection(data)}
+- Environment direction: ${buildEnvironmentDirection(data)}
+- Motion behavior: ${data.motionBehavior}
+- Core value points: ${valueBullets}
+- CTA: ${data.cta}
+
+PHASE A - IMAGE GENERATION (STARTING FRAMES)
+Generate these in order. Keep the same subject identity, logo/packaging,
+color palette, wardrobe, and environment continuity across all frames.
+
+1) IMAGE PROMPT - HOOK FRAME (0.0s)
+Prompt:
+"${data.categoryName} commercial frame, instant scroll-stop opening shot of ${data.productService}, ${styleDNA}, ${buildCameraDirection(
+    data,
+  )}, ${buildLightingDirection(data)}, ${buildEnvironmentDirection(data)}, emotional tone ${data.viewerEmotions}, ultra-detailed textures, premium ad composition, vertical-safe framing for ${data.platformList}, high clarity subject separation, cinematic realism"
+Negative prompt:
+"${negativePrompt}"
+
+2) IMAGE PROMPT - SCENARIO FRAME (1.5s)
+Prompt:
+"continuation frame with consistent subject and environment, establish context for story structure ${data.storyStructure}, reveal primary problem or curiosity beat, maintain identical brand details and material realism, controlled depth layering, cinematic composition, premium ad-grade styling"
+Negative prompt:
+"${negativePrompt}"
+
+3) IMAGE PROMPT - VALUE/PRODUCT REVEAL FRAME (3.0s)
+Prompt:
+"hero reveal frame focused on ${data.productService}, crystal-clear logo and label accuracy, visible value proof points (${valueBullets}), detailed texture rendering, cinematic lens behavior (${data.lensFeel}), dramatic but realistic lighting, high-end commercial quality"
+Negative prompt:
+"${negativePrompt}"
+
+4) IMAGE PROMPT - PROOF/MOTION INTENT FRAME (5.0s)
+Prompt:
+"proof frame that visually communicates key moments (${keyMoments}), designed for motion continuation with ${data.motionBehavior}, clean subject hierarchy, platform-native readability, premium cinematic polish, realistic reflections/shadows, brand-consistent visual language"
+Negative prompt:
+"${negativePrompt}"
+
+5) IMAGE PROMPT - CTA END FRAME (7.5s)
+Prompt:
+"final branded end-frame for CTA '${data.cta}', premium lockup composition, clear text-safe zones (${data.safeZones}), emotionally satisfying ending beat (${data.endingBeat}), polished cinematic finish, conversion-focused layout, logo/packaging perfectly legible"
+Negative prompt:
+"${negativePrompt}"
+
+PHASE B - VIDEO GENERATION (FULL 8-SECOND VIDEO)
+Use the generated images as start/reference frames in order: 1 -> 2 -> 3 -> 4 -> 5.
+
+6) VIDEO PROMPT - KEYFRAME-TO-MOTION PREVIS (8s)
+Prompt:
+"Create an 8-second cinematic previs from reference frames 1-5 in order, preserve character/product continuity, interpolate smooth motion between each frame, apply camera behavior (${data.cameraMovement}), pacing (${data.pacingPreference}), and motion style (${data.motionBehavior}); maintain realism, clear subject focus, and category style (${data.categoryName}). No logo distortion."
+
+7) VIDEO PROMPT - FINAL 8-SECOND MASTER GENERATION
+Prompt:
+"Generate final 8-second master ad video using previs timing and frame continuity. Enforce: ${buildCameraDirection(
+    data,
+  )}; ${buildLightingDirection(data)}; ${buildEnvironmentDirection(
+    data,
+  )}; audio direction ${buildAudioDirection(
+    data,
+  )}; technical specs ${buildTechSpecs(
+    data,
+  )}. Ensure story progression: hook -> scenario -> reveal -> proof -> CTA. Keep branding and label accuracy exact."
+
+8) VIDEO PROMPT - DELIVERY/POLISH PASS
+Prompt:
+"Create final polished export pass for ${data.platformList}, preserve 8-second runtime, sharpen subject clarity, maintain readable on-screen text/CTA '${data.cta}', ensure no flicker or temporal artifacts, keep legal/compliance constraints (${data.legalConstraints}), and finalize for ad deployment."
+
+DELIVERY CHECKLIST
+- 5 image keyframes generated in order
+- 1 previs video generated from those frames
+- 1 final 8-second master generated
+- 1 polished delivery pass exported`;
+}
+
 function buildConceptStarters(data) {
   const starterAngles = data.categoryStarterAngles.slice(0, 3);
   const rendered = starterAngles
@@ -1183,6 +1276,7 @@ function getOutput(id) {
 function generateOutputs() {
   const data = collectData();
   setOutput("fullRefinedPromptOutput", buildFullRefinedPrompt(data));
+  setOutput("orderedPromptStackOutput", buildOrderedPromptStack(data));
   setOutput("cleanedBriefOutput", buildCleanedBrief(data));
   setOutput("readyPromptOutput", buildReadyPrompt(data));
   setOutput("templateOutput", MASTER_TEMPLATE);
@@ -1236,6 +1330,7 @@ function loadDraft() {
 
 function clearOutputs() {
   setOutput("fullRefinedPromptOutput", "");
+  setOutput("orderedPromptStackOutput", "");
   setOutput("cleanedBriefOutput", "");
   setOutput("readyPromptOutput", "");
   setOutput("templateOutput", "");
@@ -1389,6 +1484,11 @@ function downloadMarkdownPackage() {
 ## One-Click Full Refined Prompt
 \`\`\`text
 ${getOutput("fullRefinedPromptOutput")}
+\`\`\`
+
+## Ordered Prompt Stack (Images -> 8s Video)
+\`\`\`text
+${getOutput("orderedPromptStackOutput")}
 \`\`\`
 
 ## Cleaned Client Brief
