@@ -18,8 +18,11 @@ This is a **resource pack shader override** using Minecraft Java's built-in shad
 - Compatible range: **Java 1.21.0 through 1.21.11**
 - `pack.mcmeta` declares:
   - `pack_format: 75`
-  - `supported_formats: [34, 75]`
-- Uses an overlay split so old and new 1.21 shader pipelines each get matching shader files.
+  - `supported_formats: { min_inclusive: 34, max_inclusive: 75 }`
+- Uses overlay splits so each 1.21 shader pipeline gets matching include signatures:
+  - `compat_34_55` for Java 1.21.0 to 1.21.5
+  - `compat_56_68` for Java 1.21.6 to 1.21.8
+  - root shaders for Java 1.21.9+
 
 ## Download file
 
@@ -34,7 +37,7 @@ After build, use:
 2. Press `Cmd + Shift + G`.
 3. Paste:
    `~/Library/Application Support/minecraft/resourcepacks`
-4. Copy `Hallzy_VanillaShader_Java_1.21.11.zip` into that folder.
+4. Copy `Hallzy_VanillaShader_Java_1.21.11_hotfix1.zip` into that folder.
 5. Launch Minecraft Java 1.21.x.
 6. Go to **Options -> Resource Packs** and enable the pack.
 7. Move the pack to the top of the active stack if needed.
@@ -45,6 +48,7 @@ After build, use:
 - If Minecraft says **broken**, remove old copies of this pack from `resourcepacks` and keep only the latest zip.
 - Do not extract the zip. Put the zip file itself into the `resourcepacks` folder.
 - Disable other shader/resource packs while testing (pack conflicts can trigger shader compile errors).
+- If the pack loads but visuals look unchanged, set **Video Settings -> Graphics: Fancy/Fabulous** and restart the world once.
 
 ## Source files
 
@@ -53,5 +57,7 @@ Pack source lives in:
 - `java-vanilla-shader-pack/pack.mcmeta`
 - `java-vanilla-shader-pack/assets/minecraft/shaders/include/fog.glsl`
 - `java-vanilla-shader-pack/assets/minecraft/shaders/include/light.glsl`
-- `java-vanilla-shader-pack/compat_34_68/assets/minecraft/shaders/include/fog.glsl`
-- `java-vanilla-shader-pack/compat_34_68/assets/minecraft/shaders/include/light.glsl`
+- `java-vanilla-shader-pack/compat_34_55/assets/minecraft/shaders/include/fog.glsl`
+- `java-vanilla-shader-pack/compat_34_55/assets/minecraft/shaders/include/light.glsl`
+- `java-vanilla-shader-pack/compat_56_68/assets/minecraft/shaders/include/fog.glsl`
+- `java-vanilla-shader-pack/compat_56_68/assets/minecraft/shaders/include/light.glsl`

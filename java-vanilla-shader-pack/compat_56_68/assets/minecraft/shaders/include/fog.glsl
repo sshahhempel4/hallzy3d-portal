@@ -1,4 +1,4 @@
-#version 330
+#version 150
 
 layout(std140) uniform Fog {
     vec4 FogColor;
@@ -31,14 +31,7 @@ float linear_fog_value(float vertexDistance, float fogStart, float fogEnd) {
     return (vertexDistance - fogStart) / (fogEnd - fogStart);
 }
 
-float total_fog_value(
-    float sphericalVertexDistance,
-    float cylindricalVertexDistance,
-    float environmentalStart,
-    float environmantalEnd,
-    float renderDistanceStart,
-    float renderDistanceEnd
-) {
+float total_fog_value(float sphericalVertexDistance, float cylindricalVertexDistance, float environmentalStart, float environmantalEnd, float renderDistanceStart, float renderDistanceEnd) {
     float fogValue = max(
         linear_fog_value(sphericalVertexDistance, environmentalStart, environmantalEnd),
         linear_fog_value(cylindricalVertexDistance, renderDistanceStart, renderDistanceEnd)
@@ -46,25 +39,8 @@ float total_fog_value(
     return hallzy_fog_curve(fogValue);
 }
 
-vec4 apply_fog(
-    vec4 inColor,
-    float sphericalVertexDistance,
-    float cylindricalVertexDistance,
-    float environmentalStart,
-    float environmantalEnd,
-    float renderDistanceStart,
-    float renderDistanceEnd,
-    vec4 fogColor
-) {
-    float fogValue = total_fog_value(
-        sphericalVertexDistance,
-        cylindricalVertexDistance,
-        environmentalStart,
-        environmantalEnd,
-        renderDistanceStart,
-        renderDistanceEnd
-    );
-
+vec4 apply_fog(vec4 inColor, float sphericalVertexDistance, float cylindricalVertexDistance, float environmentalStart, float environmantalEnd, float renderDistanceStart, float renderDistanceEnd, vec4 fogColor) {
+    float fogValue = total_fog_value(sphericalVertexDistance, cylindricalVertexDistance, environmentalStart, environmantalEnd, renderDistanceStart, renderDistanceEnd);
     vec3 gradedColor = hallzy_cinematic_grade(inColor.rgb);
     vec3 gradedFog = hallzy_cinematic_grade(fogColor.rgb);
     return vec4(mix(gradedColor, gradedFog, fogValue * fogColor.a), inColor.a);
