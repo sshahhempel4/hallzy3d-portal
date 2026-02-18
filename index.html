@@ -3,530 +3,148 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Renderment Prompt Blueprint Builder</title>
+    <title>Renderment Prompt Builder</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <header class="hero">
-      <div class="hero-inner">
-        <p class="eyebrow">Renderment Studio Tool</p>
-        <h1>Prompt Blueprint Builder</h1>
+      <div class="container">
+        <p class="eyebrow">Renderment</p>
+        <h1>Simple Prompt Builder</h1>
         <p class="subtitle">
-          Capture a client vision and generate production-ready prompt blueprints
-          for cinematic video, image, and 3D creative pipelines.
+          Fill client details once, then copy one final scene-by-scene prompt
+          stack (image keyframes first, full video generation second).
         </p>
       </div>
     </header>
 
-    <main class="page">
-      <section class="panel">
-        <h2>How to use this app</h2>
-        <ol>
-          <li>Select a Renderment workflow category preset.</li>
-          <li>Fill out the intake form below (or click "Load Demo Data").</li>
-          <li>Click "Generate Prompt Package".</li>
-          <li>
-            Copy the outputs into ChatGPT/Claude/Cursor to produce concepts and
-            scene-ready prompts.
-          </li>
-        </ol>
-        <div class="action-row">
-          <button id="loadDemoBtn" type="button" class="button secondary">
-            Load Demo Data
-          </button>
-          <button id="clearFormBtn" type="button" class="button ghost">
-            Clear Form
-          </button>
-        </div>
-      </section>
+    <main class="container layout">
+      <section class="card">
+        <h2>Client Intake</h2>
+        <p class="muted">
+          Keep this short. The app will convert it into a full ordered prompt
+          stack.
+        </p>
 
-      <section class="panel">
-        <h2>Customer Vision Intake</h2>
-        <form id="intakeForm">
-          <fieldset>
-            <legend>0) Renderment Workflow Dataset Profile</legend>
-            <div class="grid two">
-              <label>
-                Creative Category Preset
-                <select id="creativeCategory">
-                  <option value="category1_viral_hook">
-                    Category 1: Funny AI Intro / Viral Hook Videos
-                  </option>
-                  <option value="category2_hyper_product">
-                    Category 2: Hyper-Realistic Product Videos
-                  </option>
-                  <option value="category3_pixar_3d">
-                    Category 3: 3D Animated Pixar-Style Videos
-                  </option>
-                  <option value="category4_app_brand_ads">
-                    Category 4: Cinematic App and Brand Advertisements
-                  </option>
-                  <option value="category5_gallery_showcase">
-                    Category 5: Cinematic Showcase / Gallery-Style Edits
-                  </option>
-                  <option value="category6_social_shortform">
-                    Category 6: Social Media Optimized Short-Form
-                  </option>
-                  <option value="custom">Custom / Hybrid Category</option>
-                </select>
-              </label>
-              <label>
-                Category Blend Notes (optional)
-                <input
-                  id="categoryBlendNotes"
-                  type="text"
-                  placeholder="Example: Mix Category 2 product realism with Category 1 viral hook pacing"
-                />
-              </label>
-            </div>
-            <label>
-              Category-Specific Overrides
-              <textarea
-                id="categoryOverrideNotes"
-                rows="2"
-                placeholder="Any creative direction that should override the selected category preset"
-              ></textarea>
-            </label>
-            <div class="dataset-preview-wrap">
-              <p class="hint">
-                Live preset preview (auto-injected into generated outputs):
-              </p>
-              <pre id="categoryDatasetPreview" class="dataset-preview"></pre>
-            </div>
-          </fieldset>
+        <form id="intakeForm" class="form-grid">
+          <label>
+            Client / Brand Name
+            <input id="clientName" type="text" placeholder="Renderment Client" />
+          </label>
 
-          <fieldset>
-            <legend>1) Basic Project Information</legend>
-            <div class="grid two">
-              <label>
-                Brand / Company Name
-                <input id="brandName" type="text" />
-              </label>
-              <label>
-                Contact Name + Role
-                <input id="contactName" type="text" />
-              </label>
-              <label>
-                Contact Email
-                <input id="contactEmail" type="email" />
-              </label>
-              <label>
-                Project / Campaign Name
-                <input id="projectName" type="text" />
-              </label>
-              <label>
-                Launch Window
-                <input id="launchWindow" type="text" />
-              </label>
-              <label>
-                Budget Range
-                <input id="budgetRange" type="text" />
-              </label>
-            </div>
-          </fieldset>
+          <label>
+            Project Name
+            <input id="projectName" type="text" placeholder="Spring Campaign Launch" />
+          </label>
 
-          <fieldset>
-            <legend>2) Deliverables and Channels</legend>
-            <div class="checkbox-grid">
-              <label><input id="dCinematicVideo" data-group="deliverables" data-label="Cinematic AI video" type="checkbox" /> Cinematic AI video</label>
-              <label><input id="dUltraImage" data-group="deliverables" data-label="Ultra-detailed AI images" type="checkbox" /> Ultra-detailed AI images</label>
-              <label><input id="dStylized3d" data-group="deliverables" data-label="Stylized 3D visuals" type="checkbox" /> Stylized 3D visuals</label>
-              <label><input id="dMixedCampaign" data-group="deliverables" data-label="Mixed campaign (video + image + 3D)" type="checkbox" /> Mixed campaign</label>
-              <label><input id="dShortVertical" data-group="deliverables" data-label="9:16 short-form" type="checkbox" /> 9:16 short-form</label>
-              <label><input id="dHorizontalVideo" data-group="deliverables" data-label="16:9 horizontal video" type="checkbox" /> 16:9 horizontal video</label>
-              <label><input id="dSquareCut" data-group="deliverables" data-label="1:1 social cut" type="checkbox" /> 1:1 social cut</label>
-              <label><input id="dProductStills" data-group="deliverables" data-label="Product stills" type="checkbox" /> Product stills</label>
-              <label><input id="d3dFrames" data-group="deliverables" data-label="3D hero frames" type="checkbox" /> 3D hero frames</label>
-              <label><input id="dAdVariations" data-group="deliverables" data-label="Ad variations/cutdowns" type="checkbox" /> Ad variations/cutdowns</label>
-            </div>
-            <label>
-              Exact Deliverable List and Quantity
-              <textarea id="deliverableQuantity" rows="3"></textarea>
-            </label>
-            <label>
-              Platform(s)
-              <input
-                id="platformList"
-                type="text"
-                placeholder="TikTok, Reels, YouTube Shorts, YouTube, landing page, paid ads"
-              />
-            </label>
-          </fieldset>
+          <label>
+            Product / Subject
+            <input id="productName" type="text" placeholder="Product, app, character, or service" />
+          </label>
 
-          <fieldset>
-            <legend>3) Campaign Goal and Brand Context</legend>
-            <div class="grid two">
-              <label>
-                Main Objective
-                <input id="goalObjective" type="text" />
-              </label>
-              <label>
-                KPI / Success Signal
-                <input id="kpis" type="text" />
-              </label>
-              <label>
-                Primary CTA
-                <input id="cta" type="text" />
-              </label>
-              <label>
-                Next Destination (where the audience should go)
-                <input id="nextStep" type="text" />
-              </label>
-              <label>
-                Target Audience
-                <input id="targetAudience" type="text" />
-              </label>
-              <label>
-                Region / Language
-                <input id="regionLanguage" type="text" />
-              </label>
-              <label>
-                Brand Personality (3-5 words)
-                <input id="brandPersonality" type="text" />
-              </label>
-              <label>
-                Campaign Tone
-                <input id="campaignTone" type="text" />
-              </label>
-            </div>
-            <label>
-              Emotions to Trigger
-              <input id="viewerEmotions" type="text" />
-            </label>
-          </fieldset>
+          <label>
+            Main Goal
+            <input id="goal" type="text" placeholder="Conversions, awareness, installs, etc." />
+          </label>
 
-          <fieldset>
-            <legend>4) Product and Message</legend>
-            <div class="grid two">
-              <label>
-                Product / Service
-                <input id="productService" type="text" />
-              </label>
-              <label>
-                Core Message
-                <input id="coreMessage" type="text" />
-              </label>
-            </div>
-            <label>
-              Top Value Points (one per line)
-              <textarea id="topValuePoints" rows="3"></textarea>
-            </label>
-            <label>
-              Claims that must be included
-              <textarea id="claimsInclude" rows="2"></textarea>
-            </label>
-            <label>
-              Claims or topics to avoid
-              <textarea id="claimsAvoid" rows="2"></textarea>
-            </label>
-          </fieldset>
+          <label>
+            Target Audience
+            <input id="audience" type="text" placeholder="Who this is for" />
+          </label>
 
-          <fieldset>
-            <legend>5) Visual Style Direction</legend>
-            <div class="checkbox-grid">
-              <label><input id="sCinematic8k" data-group="styleFamily" data-label="Cinematic 8K ad style" type="checkbox" /> Cinematic 8K ad style</label>
-              <label><input id="sHyperReal" data-group="styleFamily" data-label="Hyper-real product showcase" type="checkbox" /> Hyper-real product showcase</label>
-              <label><input id="sPixar3d" data-group="styleFamily" data-label="Pixar-style 3D animation" type="checkbox" /> Pixar-style 3D animation</label>
-              <label><input id="sCartoonReal" data-group="styleFamily" data-label="Cartoon-to-real transformation" type="checkbox" /> Cartoon-to-real transformation</label>
-              <label><input id="sPov" data-group="styleFamily" data-label="Handheld POV social ad" type="checkbox" /> Handheld POV ad</label>
-              <label><input id="sVlog" data-group="styleFamily" data-label="Vlog-style creator ad" type="checkbox" /> Vlog creator ad</label>
-              <label><input id="sTech" data-group="styleFamily" data-label="Futuristic tech aesthetic" type="checkbox" /> Futuristic tech aesthetic</label>
-              <label><input id="sLuxury" data-group="styleFamily" data-label="Minimal luxury commercial look" type="checkbox" /> Minimal luxury look</label>
-            </div>
-            <label>
-              Reference Links or Mood Notes
-              <textarea id="referenceLinks" rows="3"></textarea>
-            </label>
-            <label>
-              Non-negotiable Visual Elements
-              <textarea id="nonNegotiables" rows="2"></textarea>
-            </label>
-          </fieldset>
+          <label>
+            Platform(s)
+            <input id="platforms" type="text" placeholder="TikTok, Reels, Shorts, Meta Ads" />
+          </label>
 
-          <fieldset>
-            <legend>6) Camera, Lighting, Environment, Motion</legend>
-            <div class="grid two">
-              <label>
-                Shot Styles
-                <input id="shotStyles" type="text" placeholder="macro, close-up, overhead, orbit" />
-              </label>
-              <label>
-                Camera Movement
-                <input id="cameraMovement" type="text" placeholder="slow dolly, handheld, kinetic" />
-              </label>
-              <label>
-                Lens Feel
-                <input id="lensFeel" type="text" placeholder="24mm wide, 50mm portrait, macro" />
-              </label>
-              <label>
-                Depth of Field Preference
-                <input id="dofPreference" type="text" placeholder="deep focus, shallow bokeh, mixed" />
-              </label>
-              <label>
-                Pacing Preference
-                <input id="pacingPreference" type="text" />
-              </label>
-              <label>
-                Lighting Mood
-                <input id="lightingMood" type="text" />
-              </label>
-              <label>
-                Color Temperature
-                <input id="colorTemperature" type="text" />
-              </label>
-              <label>
-                Environment / Location
-                <input id="environmentLocation" type="text" />
-              </label>
-              <label>
-                Atmosphere
-                <input id="atmosphere" type="text" />
-              </label>
-              <label>
-                Texture Realism Target
-                <input id="textureRealism" type="text" />
-              </label>
-              <label>
-                Story Structure
-                <input id="storyStructure" type="text" />
-              </label>
-              <label>
-                Motion Behavior
-                <input id="motionBehavior" type="text" />
-              </label>
-            </div>
-            <label>
-              Key Moments that must happen
-              <textarea id="keyMoments" rows="2"></textarea>
-            </label>
-            <label>
-              Preferred Ending Beat
-              <input id="endingBeat" type="text" />
-            </label>
-          </fieldset>
+          <label>
+            Creative Category
+            <select id="category">
+              <option value="viral_hook">Funny AI Intro / Viral Hook</option>
+              <option value="hyper_product">Hyper-Real Product</option>
+              <option value="pixar_3d">Pixar-Style 3D Animation</option>
+              <option value="app_brand">Cinematic App/Brand Ad</option>
+              <option value="gallery_showcase">Gallery-Style Showcase</option>
+              <option value="social_shortform">Social Short-Form Optimized</option>
+              <option value="custom">Custom / Hybrid</option>
+            </select>
+          </label>
 
-          <fieldset>
-            <legend>7) Audio and Technical Specs</legend>
-            <div class="grid two">
-              <label>
-                Music Style / Mood
-                <input id="musicStyle" type="text" />
-              </label>
-              <label>
-                Voiceover Needed
-                <select id="voiceoverNeeded">
-                  <option value="">Select</option>
-                  <option value="Yes">Yes</option>
-                  <option value="No">No</option>
-                  <option value="Maybe">Maybe</option>
-                </select>
-              </label>
-              <label>
-                Voiceover Specs (if any)
-                <input id="voiceoverSpecs" type="text" />
-              </label>
-              <label>
-                Sound Design Style
-                <input id="soundDesign" type="text" />
-              </label>
-              <label>
-                Music Licensing Constraints
-                <input id="musicConstraints" type="text" />
-              </label>
-              <label>
-                Aspect Ratios
-                <input id="aspectRatios" type="text" />
-              </label>
-              <label>
-                Resolution Target
-                <input id="resolutionTarget" type="text" />
-              </label>
-              <label>
-                Frame Rate
-                <input id="frameRate" type="text" />
-              </label>
-              <label>
-                Max Runtime by Platform
-                <input id="maxRuntime" type="text" />
-              </label>
-              <label>
-                Caption / Subtitle Requirements
-                <input id="captionReqs" type="text" />
-              </label>
-            </div>
-            <label>
-              Safe Zone or Branding Placement Constraints
-              <textarea id="safeZones" rows="2"></textarea>
-            </label>
-          </fieldset>
+          <label>
+            Video Length (seconds)
+            <input id="durationSeconds" type="number" min="3" max="60" value="8" />
+          </label>
 
-          <fieldset>
-            <legend>8) Constraints, Assets, Workflow</legend>
-            <label>
-              Must Include (one per line)
-              <textarea id="mustInclude" rows="3"></textarea>
-            </label>
-            <label>
-              Must Avoid (one per line)
-              <textarea id="mustAvoid" rows="3"></textarea>
-            </label>
-            <label>
-              Compliance / Legal Constraints
-              <textarea id="legalConstraints" rows="2"></textarea>
-            </label>
-            <div class="checkbox-grid">
-              <label><input id="aPhotos" data-group="assets" data-label="Product photos" type="checkbox" /> Product photos</label>
-              <label><input id="aVideos" data-group="assets" data-label="Product videos" type="checkbox" /> Product videos</label>
-              <label><input id="aModels" data-group="assets" data-label="3D models" type="checkbox" /> 3D models</label>
-              <label><input id="aGuidelines" data-group="assets" data-label="Brand guidelines" type="checkbox" /> Brand guidelines</label>
-              <label><input id="aLogos" data-group="assets" data-label="Logos" type="checkbox" /> Logos</label>
-              <label><input id="aFonts" data-group="assets" data-label="Fonts" type="checkbox" /> Fonts</label>
-              <label><input id="aExistingAds" data-group="assets" data-label="Existing ads" type="checkbox" /> Existing ads</label>
-              <label><input id="aVoiceSamples" data-group="assets" data-label="Voiceover samples" type="checkbox" /> Voiceover samples</label>
-              <label><input id="aMusicRefs" data-group="assets" data-label="Music references" type="checkbox" /> Music references</label>
-              <label><input id="aScript" data-group="assets" data-label="Script copy" type="checkbox" /> Script copy</label>
-            </div>
-            <label>
-              Asset Links / Folder Paths
-              <textarea id="assetLinks" rows="2"></textarea>
-            </label>
-            <div class="grid two">
-              <label>
-                Decision-maker
-                <input id="decisionMaker" type="text" />
-              </label>
-              <label>
-                Review Rounds Expected
-                <input id="reviewRounds" type="text" />
-              </label>
-              <label>
-                Internal Review Timeline
-                <input id="reviewTimeline" type="text" />
-              </label>
-              <label>
-                Final Sign-off Date
-                <input id="finalSignoff" type="text" />
-              </label>
-              <label>
-                Priority Level
-                <select id="priorityLevel">
-                  <option value="">Select</option>
-                  <option value="Standard">Standard</option>
-                  <option value="Rush">Rush</option>
-                  <option value="Critical">Critical</option>
-                </select>
-              </label>
-              <label>
-                Number of Concept Directions
-                <input id="numberOfConcepts" type="number" min="1" max="10" value="3" />
-              </label>
-            </div>
-          </fieldset>
+          <label>
+            Tone
+            <input id="tone" type="text" placeholder="Cinematic, funny, premium, emotional" />
+          </label>
 
-          <fieldset>
-            <legend>9) One-Paragraph Vision</legend>
-            <label>
-              Vision Paragraph (4-8 sentences)
-              <textarea id="visionParagraph" rows="4"></textarea>
-            </label>
-          </fieldset>
+          <label>
+            Visual Style
+            <input id="style" type="text" placeholder="Hyper-real, Pixar-like 3D, handheld POV, etc." />
+          </label>
 
-          <div class="action-row">
-            <button id="generateBtn" type="submit" class="button primary">
-              Generate Prompt Package
-            </button>
-            <button id="downloadBtn" type="button" class="button secondary">
-              Download as Markdown
-            </button>
+          <label>
+            Camera Direction
+            <input id="camera" type="text" placeholder="Lens + movement + framing" />
+          </label>
+
+          <label>
+            Lighting Direction
+            <input id="lighting" type="text" placeholder="Soft daylight, moody contrast, neon, etc." />
+          </label>
+
+          <label>
+            Environment Direction
+            <input id="environment" type="text" placeholder="Studio, street, gallery, abstract world, etc." />
+          </label>
+
+          <label>
+            Motion / Pacing
+            <input id="motion" type="text" placeholder="Fast hook, smooth cinematic, handheld, etc." />
+          </label>
+
+          <label>
+            CTA
+            <input id="cta" type="text" placeholder="Shop now, download app, book now" />
+          </label>
+
+          <label class="full">
+            Must Include
+            <textarea id="mustInclude" rows="2" placeholder="Logo lockup, product close-up, specific claim, brand colors"></textarea>
+          </label>
+
+          <label class="full">
+            Must Avoid
+            <textarea id="mustAvoid" rows="2" placeholder="Wrong logo, blurry labels, over-saturation, medical claims"></textarea>
+          </label>
+
+          <label class="full">
+            Extra Notes (optional)
+            <textarea id="extraNotes" rows="3" placeholder="Any custom client requests"></textarea>
+          </label>
+
+          <div class="actions full">
+            <button type="submit" class="btn primary">Generate Final Prompt Stack</button>
+            <button type="button" id="loadDemoBtn" class="btn">Load Demo</button>
+            <button type="button" id="clearBtn" class="btn ghost">Clear</button>
           </div>
         </form>
       </section>
 
-      <section class="panel">
-        <h2>Generated Output</h2>
-        <p class="hint">
-          These outputs are copy-ready for your AI assistant and internal
-          production docs.
+      <section class="card">
+        <div class="output-header">
+          <h2>Final Prompt Stack (Copy This)</h2>
+          <button id="copyBtn" type="button" class="btn">Copy</button>
+        </div>
+        <p class="muted">
+          One box only: ordered scene prompts for image generation and full
+          video generation.
         </p>
-
-        <article class="output-card">
-          <div class="output-header">
-            <h3>One-Click Full Refined Prompt</h3>
-            <button class="button ghost copy-btn" data-target="fullRefinedPromptOutput" type="button">
-              Copy
-            </button>
-          </div>
-          <pre id="fullRefinedPromptOutput" class="output"></pre>
-        </article>
-
-        <article class="output-card">
-          <div class="output-header">
-            <h3>Ordered Prompt Stack (Images -> 8s Video)</h3>
-            <button class="button ghost copy-btn" data-target="orderedPromptStackOutput" type="button">
-              Copy
-            </button>
-          </div>
-          <pre id="orderedPromptStackOutput" class="output"></pre>
-        </article>
-
-        <article class="output-card">
-          <div class="output-header">
-            <h3>Cleaned Client Brief</h3>
-            <button class="button ghost copy-btn" data-target="cleanedBriefOutput" type="button">
-              Copy
-            </button>
-          </div>
-          <pre id="cleanedBriefOutput" class="output"></pre>
-        </article>
-
-        <article class="output-card">
-          <div class="output-header">
-            <h3>Ready-to-Run Filled Prompt</h3>
-            <button class="button ghost copy-btn" data-target="readyPromptOutput" type="button">
-              Copy
-            </button>
-          </div>
-          <pre id="readyPromptOutput" class="output"></pre>
-        </article>
-
-        <article class="output-card">
-          <div class="output-header">
-            <h3>Reusable Master Prompt Template</h3>
-            <button class="button ghost copy-btn" data-target="templateOutput" type="button">
-              Copy
-            </button>
-          </div>
-          <pre id="templateOutput" class="output"></pre>
-        </article>
-
-        <article class="output-card">
-          <div class="output-header">
-            <h3>Concept Direction Starters (Optional)</h3>
-            <button class="button ghost copy-btn" data-target="conceptSeedsOutput" type="button">
-              Copy
-            </button>
-          </div>
-          <pre id="conceptSeedsOutput" class="output"></pre>
-        </article>
-
-        <article class="output-card">
-          <div class="output-header">
-            <h3>Workflow Dataset Notes</h3>
-            <button class="button ghost copy-btn" data-target="workflowDatasetOutput" type="button">
-              Copy
-            </button>
-          </div>
-          <pre id="workflowDatasetOutput" class="output"></pre>
-        </article>
+        <pre id="finalPromptOutput" class="output"></pre>
       </section>
     </main>
-
-    <footer class="footer">
-      <p>
-        Renderment Prompt Blueprint Builder - local web app for intake to
-        prompt-generation workflow.
-      </p>
-    </footer>
 
     <script src="app.js"></script>
   </body>
