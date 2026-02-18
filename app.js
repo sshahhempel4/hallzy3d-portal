@@ -329,6 +329,44 @@ function rgbToHex(r, g, b) {
     .join("")}`;
 }
 
+function rgbToHsv(r, g, b) {
+  const rn = r / 255;
+  const gn = g / 255;
+  const bn = b / 255;
+  const max = Math.max(rn, gn, bn);
+  const min = Math.min(rn, gn, bn);
+  const delta = max - min;
+  let hue = 0;
+
+  if (delta !== 0) {
+    if (max === rn) {
+      hue = ((gn - bn) / delta) % 6;
+    } else if (max === gn) {
+      hue = (bn - rn) / delta + 2;
+    } else {
+      hue = (rn - gn) / delta + 4;
+    }
+    hue *= 60;
+    if (hue < 0) hue += 360;
+  }
+
+  const saturation = max === 0 ? 0 : delta / max;
+  const value = max;
+  return { hue, saturation, value };
+}
+
+function hueNameFromDegrees(hue) {
+  if (hue < 20 || hue >= 340) return "red";
+  if (hue < 45) return "orange";
+  if (hue < 70) return "yellow";
+  if (hue < 160) return "green";
+  if (hue < 210) return "cyan";
+  if (hue < 260) return "blue";
+  if (hue < 290) return "violet";
+  if (hue < 340) return "magenta";
+  return "neutral";
+}
+
 function extractDominantPalette(imageData) {
   const histogram = new Map();
   const pixels = imageData.data;
@@ -358,6 +396,124 @@ function extractDominantPalette(imageData) {
   return top.map(([r, g, b]) => rgbToHex(r, g, b));
 }
 
+function extractImageStats(imageData) {
+  const { data, width, height } = imageData;
+  const luminanceGrid = new Float32Array(width * height);
+  const hueBins = new Array(12).fill(0);
+  let validCount = 0;
+  let luminanceSum = 0;
+  let luminanceSqSum = 0;
+  let saturationSum = 0;
+  let warmBiasSum = 0;
+
+  for (let y = 0; y < height; y += 1) {
+    for (let x = 0; x < width; x += 1) {
+      const idx = y * width + x;
+      const px = idx * 4;
+      const r = data[px];
+      const g = data[px + 1];
+      const b = data[px + 2];
+      const a = data[px + 3];
+
+      if (a < 20) {
+        luminanceGrid[idx] = 0;
+        continue;
+      }
+
+      const luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+      const hsv = rgbToHsv(r, g, b);
+
+      luminanceGrid[idx] = luminance;
+      luminanceSum += luminance;
+      luminanceSqSum += luminance * luminance;
+      saturationSum += hsv.saturation;
+      warmBiasSum += r - b;
+      validCount += 1;
+
+      if (hsv.saturation > 0.18) {
+        const hueBin = Math.floor(hsv.hue / 30) % 12;
+        hueBins[hueBin] += 1;
+      }
+    }
+  }
+
+  if (!validCount) {
+    return {
+      avgLuminance: 128,
+      luminanceStd: 35,
+      avgSaturation: 0.3,
+      warmBias: 0,
+      edgeDensity: 0.15,
+      dominantHues: ["neutral"],
+    };
+  }
+
+  let edgeHits = 0;
+  let edgeChecks = 0;
+  for (let y = 1; y < height; y += 1) {
+    for (let x = 1; x < width; x += 1) {
+      const idx = y * width + x;
+      const current = luminanceGrid[idx];
+      const left = luminanceGrid[idx - 1];
+      const up = luminanceGrid[idx - width];
+      if (current === 0 && left === 0 && up === 0) {
+        continue;
+      }
+      const gradient = Math.abs(current - left) + Math.abs(current - up);
+      edgeChecks += 1;
+      if (gradient > 34) edgeHits += 1;
+    }
+  }
+
+  const avgLuminance = luminanceSum / validCount;
+  const luminanceVariance = Math.max(0, luminanceSqSum / validCount - avgLuminance * avgLuminance);
+  const luminanceStd = Math.sqrt(luminanceVariance);
+  const avgSaturation = saturationSum / validCount;
+  const warmBias = warmBiasSum / validCount;
+  const edgeDensity = edgeChecks ? edgeHits / edgeChecks : 0;
+
+  const dominantHues = hueBins
+    .map((count, index) => ({ count, index }))
+    .filter((entry) => entry.count > 0)
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 3)
+    .map((entry) => hueNameFromDegrees(entry.index * 30));
+
+  return {
+    avgLuminance,
+    luminanceStd,
+    avgSaturation,
+    warmBias,
+    edgeDensity,
+    dominantHues: dominantHues.length ? dominantHues : ["neutral"],
+  };
+}
+
+function describeImageProfile(width, height, orientation, palette, stats) {
+  const brightness =
+    stats.avgLuminance < 85 ? "dark" : stats.avgLuminance < 170 ? "balanced" : "bright";
+  const contrast =
+    stats.luminanceStd < 35 ? "soft contrast" : stats.luminanceStd < 65 ? "medium contrast" : "high contrast";
+  const saturation =
+    stats.avgSaturation < 0.2
+      ? "muted saturation"
+      : stats.avgSaturation < 0.5
+        ? "balanced saturation"
+        : "vivid saturation";
+  const temperature =
+    stats.warmBias > 12 ? "warm color temperature" : stats.warmBias < -12 ? "cool color temperature" : "neutral color temperature";
+  const detailDensity =
+    stats.edgeDensity < 0.12
+      ? "clean/minimal detail density"
+      : stats.edgeDensity < 0.24
+        ? "moderate detail density"
+        : "high texture/detail density";
+  const aspectRatio = width > 0 && height > 0 ? (width / height).toFixed(2) : "unknown";
+  const hues = stats.dominantHues.join(", ");
+
+  return `${orientation} composition (aspect ratio ${aspectRatio}), ${brightness} exposure, ${contrast}, ${saturation}, ${temperature}, ${detailDensity}, dominant hue families ${hues}, sampled palette ${palette.join(", ")}`;
+}
+
 async function analyzeImageFile(file) {
   const url = URL.createObjectURL(file);
 
@@ -383,6 +539,8 @@ async function analyzeImageFile(file) {
     ctx.drawImage(image, 0, 0, sampleW, sampleH);
     const data = ctx.getImageData(0, 0, sampleW, sampleH);
     const palette = extractDominantPalette(data);
+    const stats = extractImageStats(data);
+    const description = describeImageProfile(width, height, orientation, palette, stats);
 
     return {
       name: file.name,
@@ -391,6 +549,8 @@ async function analyzeImageFile(file) {
       orientation,
       palette,
       keywords: splitNameTokens(file.name),
+      description,
+      stats,
     };
   } catch (_error) {
     return {
@@ -400,6 +560,15 @@ async function analyzeImageFile(file) {
       orientation: "unknown",
       palette: ["#808080"],
       keywords: splitNameTokens(file.name),
+      description: "reference image could not be decoded; use filename and brand context only",
+      stats: {
+        avgLuminance: 128,
+        luminanceStd: 35,
+        avgSaturation: 0.3,
+        warmBias: 0,
+        edgeDensity: 0.15,
+        dominantHues: ["neutral"],
+      },
     };
   } finally {
     URL.revokeObjectURL(url);
@@ -466,6 +635,7 @@ function collectInputs() {
       readRaw("vision"),
       "The final output should feel premium, clear, engaging, and conversion-ready.",
     ),
+    referenceImageNotes: pick(readRaw("referenceImageNotes"), "None provided"),
   };
 }
 
@@ -482,9 +652,15 @@ async function buildReferenceIntelligence(data) {
   const imageLines = imageAnalysis.length
     ? imageAnalysis.map((item, index) => {
         const cues = item.keywords.length ? item.keywords.join(", ") : "none";
-        return `REF_IMG_${index + 1}: ${item.name} (${item.width}x${item.height}, ${item.orientation}), dominant palette ${item.palette.join(", ")}, filename cues ${cues}`;
+        return `REF_IMG_${index + 1}: ${item.name} (${item.width}x${item.height}, ${item.orientation}), filename cues ${cues}`;
       })
     : ["No image downloads analyzed."];
+
+  const imageDescriptionLines = imageAnalysis.length
+    ? imageAnalysis.map((item, index) => {
+        return `REF_IMG_${index + 1} description: ${item.description}`;
+      })
+    : ["No auto-generated image descriptions available."];
 
   const paletteHint =
     imageAnalysis.length > 0
@@ -499,14 +675,26 @@ async function buildReferenceIntelligence(data) {
     Product type is ${data.productType}, package format is ${data.packageFormat}, and material/finish is ${data.packageMaterial}.
     Visual palette should align with ${data.brandPalette}, plus inferred download palette ${paletteHint}.
     Attachment cue keywords to incorporate where relevant: ${keywordHint.length ? keywordHint.join(", ") : "none"}.
+    Auto reference image descriptions to use as style anchors: ${imageDescriptionLines.join(" | ")}.
+    Manual image notes from user: ${data.referenceImageNotes}.
     Keep all must-include instructions active: ${data.mustInclude}.`
   );
 
+  const perSceneRefs = SCENES.map((scene, index) => {
+    if (!imageAnalysis.length) {
+      return "No attached image reference available; derive look from brand/product fields only.";
+    }
+    const ref = imageAnalysis[index % imageAnalysis.length];
+    return `Primary reference for ${scene.id}: ${ref.name} - ${ref.description}`;
+  });
+
   return {
     imageLines,
+    imageDescriptionLines,
     paletteHint,
     keywordHint: keywordHint.length ? keywordHint.join(", ") : "none",
     descriptorThought,
+    perSceneRefs,
   };
 }
 
@@ -518,12 +706,21 @@ function buildSceneIdentityAnchor(data, references) {
   );
 }
 
-function buildImagePrompt(data, references, scene, sceneIndex, beatText, innovationText) {
+function buildImagePrompt(
+  data,
+  references,
+  scene,
+  sceneIndex,
+  beatText,
+  innovationText,
+  primaryRefDescription,
+) {
   return cleanMulti(
     `Create a new, original cinematic keyframe for Scene ${scene.id} (${scene.name}) covering ${scene.start}s-${scene.end}s of a ${data.durationSeconds}s ad.
     Scene objective: ${beatText}.
     Innovation directive: ${innovationText}
     Composition directive: ${scene.composition}; this shot must look visually different from every other scene.
+    Scene-specific reference image description: ${primaryRefDescription}
     Camera directive for this scene: ${scene.cameraVariation}, while honoring global camera style "${data.camera}" and category flavor "${data.categoryCameraFlavor}".
     Lighting directive for this scene: ${scene.lightingVariation}, while honoring global lighting mood "${data.lighting}".
     Environment directive for this scene: ${data.environment}; introduce a fresh framing angle or depth arrangement versus previous scene.
@@ -546,6 +743,7 @@ function buildVideoPrompt(
   sceneIndex,
   beatText,
   innovationText,
+  primaryRefDescription,
   nextScene,
 ) {
   const transition = nextScene
@@ -556,6 +754,7 @@ function buildVideoPrompt(
     `Generate Scene ${scene.id} (${scene.name}) video segment from ${scene.start}s-${scene.end}s using Scene ${scene.id} keyframe as primary visual anchor.
     Narrative beat: ${beatText}.
     Scene innovation to execute: ${innovationText}
+    Scene-specific reference image description: ${primaryRefDescription}
     Motion directive for this scene: ${scene.motionVariation}, aligned with global motion style "${data.motion}" and category pacing "${data.categoryPacing}".
     Camera movement for this scene should prioritize ${scene.cameraVariation} while staying coherent with global camera direction "${data.camera}".
     Lighting behavior should preserve ${data.lighting} but introduce scene-specific variation "${scene.lightingVariation}".
@@ -579,6 +778,8 @@ function buildFinalMasterPrompt(data, references) {
     Preserve global creative direction: tone ${data.tone}, style ${data.style}, camera ${data.camera}, lighting ${data.lighting}, environment ${data.environment}, motion ${data.motion}.
     Brand lock: ${buildSceneIdentityAnchor(data, references)}
     Detailed product rendering guidance: ${references.descriptorThought}
+    Reference image description brief: ${references.imageDescriptionLines.join(" | ")}
+    Manual reference notes: ${data.referenceImageNotes}
     Respect all reference assets from downloads and attachments.
     Must include: ${data.mustInclude} (preset: ${data.mustIncludePreset}).
     Must avoid: ${data.mustAvoid} (preset: ${data.mustAvoidPreset}).
@@ -601,6 +802,8 @@ function buildFinalPromptStack(data, references) {
     const beatText = data.sceneBeats[index] || "deliver the intended narrative beat";
     const innovationText =
       data.sceneInnovation[index] || "introduce a new visual thought specific to this scene";
+    const primaryRefDescription =
+      references.perSceneRefs[index] || "No attached image reference available for this scene.";
     const nextScene = scenes[index + 1] || null;
     const imagePrompt = buildImagePrompt(
       data,
@@ -609,6 +812,7 @@ function buildFinalPromptStack(data, references) {
       index,
       beatText,
       innovationText,
+      primaryRefDescription,
     );
     const videoPrompt = buildVideoPrompt(
       data,
@@ -617,6 +821,7 @@ function buildFinalPromptStack(data, references) {
       index,
       beatText,
       innovationText,
+      primaryRefDescription,
       nextScene,
     );
 
@@ -651,7 +856,9 @@ BRAND + PRODUCT INTELLIGENCE
 
 REFERENCE ANALYSIS FROM DOWNLOADS
 ${references.imageLines.join("\n")}
+${references.imageDescriptionLines.join("\n")}
 - Inferred keyword cues: ${references.keywordHint}
+- Manual reference notes: ${data.referenceImageNotes}
 - Additional attachment files: ${data.mustIncludeAttachments}
 - Attachment links: ${data.attachmentLinks}
 
@@ -750,6 +957,8 @@ async function loadDemo() {
     mustAvoid: "warped logo, unreadable labels, noisy texture, and cluttered text",
     vision:
       "This should feel premium and high-end, with rich material detail, unique scene progression, and a final frame that clearly drives purchase intent.",
+    referenceImageNotes:
+      "Reference image 1 is the preferred hero logo orientation, reference image 2 is the preferred material finish, reference image 3 is the preferred macro texture style.",
   };
 
   Object.entries(demo).forEach(([id, value]) => {
