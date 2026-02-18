@@ -44,6 +44,7 @@ In the app:
 2. Fill the intake form (or click "Load Demo Data")
 3. Click "Generate Prompt Package"
 4. Copy or download:
+   - one-click full refined prompt (single copy box)
    - cleaned client brief
    - ready-to-run filled prompt
    - reusable master template

@@ -1081,6 +1081,80 @@ Additional context:
 - Vision Paragraph: ${data.visionParagraph}`;
 }
 
+function buildFullRefinedPrompt(data) {
+  return `You are Renderment's Senior Prompt Architect.
+
+Task:
+Create exactly ONE fully refined, production-ready master prompt for this campaign.
+Do not provide multiple concept options.
+Do not provide alternate directions.
+Return one high-quality final prompt that can be pasted into AI video/image/3D generators.
+
+RENDERMENT DATASET LOCK
+- Selected workflow category: ${data.categoryName}
+- Category core purpose: ${data.categoryPurpose}
+- Category creative style DNA: ${inlineArray(data.categoryCreativeStyle)}
+- Category common formats: ${inlineArray(data.categoryCommonFormats)}
+- Category technical direction: ${inlineArray(data.categoryTechnicalDirection)}
+- Category structural formula: ${inlineArray(data.categoryStructuralFormula)}
+- Category blend notes: ${data.categoryBlendNotes}
+- Category override notes: ${data.categoryOverrideNotes}
+
+MANDATORY RENDERMENT PROCESS
+${buildCoreProcessShortList()}
+
+SPECIALIZATION STANDARDS
+${buildSpecializationBlock()}
+
+CLIENT INPUTS
+- Goal: ${data.goalObjective}
+- KPI / success signal: ${data.kpis}
+- Deliverables: ${data.deliverables}
+- Deliverable quantity / duration plan: ${buildDurationPlan(data)}
+- Platforms: ${data.platformList}
+- Audience: ${data.targetAudience}
+- Region / language: ${data.regionLanguage}
+- Product / service: ${data.productService}
+- Core value proposition: ${data.topValuePoints}
+- Core message: ${data.coreMessage}
+- CTA: ${data.cta}
+- Brand tone: ${data.campaignTone}
+- Emotional tone: ${data.viewerEmotions}
+- Visual style family: ${data.styleFamily}
+- References: ${data.referenceLinks}
+- Camera direction: ${buildCameraDirection(data)}
+- Lighting direction: ${buildLightingDirection(data)}
+- Environment direction: ${buildEnvironmentDirection(data)}
+- Texture realism: ${data.textureRealism}
+- Story structure: ${data.storyStructure}
+- Motion behavior: ${data.motionBehavior}
+- Key moments: ${data.keyMoments}
+- Ending beat: ${data.endingBeat}
+- Audio direction: ${buildAudioDirection(data)}
+- Technical specs: ${buildTechSpecs(data)}
+- Must include: ${data.mustInclude}
+- Must avoid: ${data.mustAvoid}
+- Compliance / legal: ${data.legalConstraints}
+- Available assets: ${data.assets}
+- Asset links: ${data.assetLinks}
+- Production constraints: ${buildConstraints(data)}
+- Timeline / deadline: ${data.launchWindow}
+- Vision paragraph: ${data.visionParagraph}
+
+OUTPUT FORMAT (STRICT)
+1) FINAL REFINED PROMPT:
+   - Return as one single copy-ready prompt block.
+   - Must include camera, lens, DOF, lighting, environment, motion, pacing, and emotional tone.
+   - Must enforce brand/logo/packaging accuracy where relevant.
+   - Must be platform-native for the listed channels.
+
+2) NEGATIVE PROMPT:
+   - Short list of elements to avoid that protect brand quality and realism.
+
+3) EXECUTION NOTES:
+   - 3 concise bullets for implementation (pacing, clarity, and conversion impact).`;
+}
+
 function buildConceptStarters(data) {
   const starterAngles = data.categoryStarterAngles.slice(0, 3);
   const rendered = starterAngles
@@ -1108,6 +1182,7 @@ function getOutput(id) {
 
 function generateOutputs() {
   const data = collectData();
+  setOutput("fullRefinedPromptOutput", buildFullRefinedPrompt(data));
   setOutput("cleanedBriefOutput", buildCleanedBrief(data));
   setOutput("readyPromptOutput", buildReadyPrompt(data));
   setOutput("templateOutput", MASTER_TEMPLATE);
@@ -1160,6 +1235,7 @@ function loadDraft() {
 }
 
 function clearOutputs() {
+  setOutput("fullRefinedPromptOutput", "");
   setOutput("cleanedBriefOutput", "");
   setOutput("readyPromptOutput", "");
   setOutput("templateOutput", "");
@@ -1309,6 +1385,11 @@ function downloadMarkdownPackage() {
   const project = textValue("projectName").replace(/[^a-z0-9]+/gi, "_").toLowerCase();
   const fileName = `${project || "renderment_prompt_package"}.md`;
   const markdown = `# Renderment Prompt Package
+
+## One-Click Full Refined Prompt
+\`\`\`text
+${getOutput("fullRefinedPromptOutput")}
+\`\`\`
 
 ## Cleaned Client Brief
 \`\`\`text
