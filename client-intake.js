@@ -47,7 +47,7 @@ function buildSubmissionText() {
   const imageNames = fileNamesFromInput("mustIncludeImages");
   const attachmentNames = fileNamesFromInput("mustIncludeAttachments");
 
-  return `RENDERMENT CUSTOMER INTAKE SUBMISSION
+  return `RENDERMINT CUSTOMER INTAKE SUBMISSION
 
 Submitted At: ${new Date().toISOString()}
 

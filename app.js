@@ -322,7 +322,7 @@ Video Prompt:
 "${videoPrompt}"`;
   });
 
-  return `RENDERMENT FINAL SCENE PROMPT STACK
+  return `RENDERMINT FINAL SCENE PROMPT STACK
 
 PROJECT
 ${data.clientName} - ${data.projectName}

@@ -1,4 +1,4 @@
-# Renderment Simple Prompt Builder
+# Rendermint Simple Prompt Builder
 
 This repo contains a simplified website app for your production workflow:
 
@@ -29,7 +29,7 @@ and the final master prompt to keep custom elements traceable.
 - `client-intake.js` - customer form copy/download logic
 - `styles.css` - clean UI styling
 - `app.js` - prompt generation logic
-- `RENDERMENT_CREATIVE_WORKFLOW_DATASET.md` - full Renderment dataset reference
+- `RENDERMENT_CREATIVE_WORKFLOW_DATASET.md` - full Rendermint dataset reference
 - `CUSTOMER_VISION_INTAKE_FORM.md` - long-form intake reference (optional)
 
 ## Run locally
