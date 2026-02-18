@@ -8,6 +8,10 @@ This repo contains a simplified website app for your production workflow:
 - you generate one final prompt stack
 - you copy from one box and run production
 
+The prompt builder now analyzes uploaded reference image downloads (dimensions,
+palette, filename cues) and injects richer brand/product descriptions into each
+scene prompt.
+
 The final output is ordered exactly for your pipeline:
 
 1. image keyframe prompts (scene by scene)
