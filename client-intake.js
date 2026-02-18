@@ -1,4 +1,13 @@
 const INTAKE_STORAGE_KEY = "renderment_customer_intake_v1";
+const CATEGORY_LABELS = {
+  viral_hook: "Funny AI Intro / Viral Hook",
+  hyper_product: "Hyper-Real Product",
+  pixar_3d: "Pixar-Style 3D Animation",
+  app_brand: "Cinematic App/Brand Ad",
+  gallery_showcase: "Gallery-Style Showcase",
+  social_shortform: "Social Short-Form Optimized",
+  custom: "Custom / Hybrid",
+};
 
 function byId(id) {
   return document.getElementById(id);
@@ -9,6 +18,17 @@ function readValue(id, fallback = "Not provided") {
   if (!el) return fallback;
   const value = (el.value || "").trim();
   return value || fallback;
+}
+
+function combinePresetAndCustom(preset, custom, fallback = "Not provided") {
+  const p = (preset || "").trim();
+  const c = (custom || "").trim();
+  const presetIsCustom = p.toLowerCase() === "custom";
+
+  if (p && !presetIsCustom && c) return `${p}; ${c}`;
+  if (p && !presetIsCustom) return p;
+  if (c) return c;
+  return fallback;
 }
 
 function fileNamesFromInput(id) {
@@ -46,6 +66,16 @@ function updateAttachmentLists() {
 function buildSubmissionText() {
   const imageNames = fileNamesFromInput("mustIncludeImages");
   const attachmentNames = fileNamesFromInput("mustIncludeAttachments");
+  const categoryKey = readValue("category", "custom");
+  const categoryLabel = CATEGORY_LABELS[categoryKey] || categoryKey;
+  const mustIncludeCombined = combinePresetAndCustom(
+    readValue("mustIncludePreset", ""),
+    readValue("mustInclude", ""),
+  );
+  const mustAvoidCombined = combinePresetAndCustom(
+    readValue("mustAvoidPreset", ""),
+    readValue("mustAvoid", ""),
+  );
 
   return `RENDERMINT CUSTOMER INTAKE SUBMISSION
 
@@ -55,10 +85,12 @@ CLIENT DETAILS
 - Brand / Company Name: ${readValue("clientName")}
 - Project Name: ${readValue("projectName")}
 - Product / Service / Subject: ${readValue("productName")}
+- Product Type: ${readValue("productType")}
+- Market Type: ${readValue("marketType")}
 - Main Goal: ${readValue("goal")}
 - Target Audience: ${readValue("audience")}
 - Platform(s): ${readValue("platforms")}
-- Creative Category: ${readValue("category")}
+- Creative Category: ${categoryLabel}
 - Desired Video Length (seconds): ${readValue("durationSeconds")}
 
 CREATIVE DIRECTION
@@ -71,11 +103,13 @@ CREATIVE DIRECTION
 - CTA: ${readValue("cta")}
 
 CUSTOM ELEMENTS
-- Must Include: ${readValue("mustInclude")}
+- Must Include Preset: ${readValue("mustIncludePreset")}
+- Must Include (final): ${mustIncludeCombined}
 - Reference Images: ${buildListText(imageNames, "None provided")}
 - Additional Files: ${buildListText(attachmentNames, "None provided")}
 - Attachment Links: ${readValue("attachmentLinks")}
-- Must Avoid: ${readValue("mustAvoid")}
+- Must Avoid Preset: ${readValue("mustAvoidPreset")}
+- Must Avoid (final): ${mustAvoidCombined}
 - Vision Summary: ${readValue("vision")}`;
 }
 

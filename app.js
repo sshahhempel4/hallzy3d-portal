@@ -119,6 +119,23 @@ function pick(value, fallback) {
   return value ? value : fallback;
 }
 
+function combinePresetAndCustom(presetValue, customValue, fallback) {
+  const preset = (presetValue || "").trim();
+  const custom = (customValue || "").trim();
+  const presetIsCustom = preset.toLowerCase() === "custom";
+
+  if (preset && !presetIsCustom && custom) {
+    return `${preset}; ${custom}`;
+  }
+  if (preset && !presetIsCustom) {
+    return preset;
+  }
+  if (custom) {
+    return custom;
+  }
+  return fallback;
+}
+
 function cleanMulti(text) {
   return text.replace(/\s+/g, " ").trim();
 }
@@ -200,6 +217,8 @@ function collectInputs() {
     clientName: pick(readRaw("clientName"), "Client"),
     projectName: pick(readRaw("projectName"), "Campaign"),
     productName: pick(readRaw("productName"), "the featured product"),
+    productType: pick(readRaw("productType"), "Not specified"),
+    marketType: pick(readRaw("marketType"), "Not specified"),
     goal: pick(readRaw("goal"), "create a high-performing marketing video"),
     audience: pick(readRaw("audience"), "social media viewers"),
     platforms: pick(readRaw("platforms"), "TikTok and Instagram Reels"),
@@ -223,17 +242,21 @@ function collectInputs() {
     ),
     motion: pick(readRaw("motion"), preset.pacing),
     cta: pick(readRaw("cta"), "Learn more"),
-    mustInclude: pick(
+    mustInclude: combinePresetAndCustom(
+      readRaw("mustIncludePreset"),
       readRaw("mustInclude"),
       "brand consistency, clear product readability, and accurate logo treatment",
     ),
+    mustIncludePreset: pick(readRaw("mustIncludePreset"), "Not specified"),
     mustIncludeImages: imageAttachmentSummary(),
     mustIncludeAttachments: attachmentSummary(),
     attachmentLinks: pick(readRaw("attachmentLinks"), "None provided"),
-    mustAvoid: pick(
+    mustAvoid: combinePresetAndCustom(
+      readRaw("mustAvoidPreset"),
       readRaw("mustAvoid"),
       "blurry output, warped logos, poor texture detail, and visual artifacts",
     ),
+    mustAvoidPreset: pick(readRaw("mustAvoidPreset"), "Not specified"),
     vision: pick(
       readRaw("vision"),
       "The final output should feel premium, clear, engaging, and conversion-ready.",
@@ -246,6 +269,7 @@ function buildImagePrompt(data, scene, beatText) {
     `Create a cinematic still keyframe for Scene ${scene.id} (${scene.name}) representing ${scene.start}s to ${scene.end}s of a ${data.durationSeconds}-second ad.
     The frame must communicate ${beatText}.
     Feature ${data.productName} as the visual priority, designed for ${data.audience}.
+    Product type context: ${data.productType}. Market context: ${data.marketType}.
     Keep the overall tone ${data.tone} and style ${data.style}, aligned with ${data.categoryLabel} direction.
     Camera treatment should follow ${data.camera}, with ${data.categoryCameraFlavor}.
     Lighting should follow ${data.lighting}.
@@ -267,6 +291,7 @@ function buildVideoPrompt(data, scene, nextScene, beatText) {
   return cleanMulti(
     `Generate the Scene ${scene.id} (${scene.name}) video segment from ${scene.start}s to ${scene.end}s using the matching keyframe as the visual anchor.
     This shot should express ${beatText}.
+    Product type context: ${data.productType}. Market context: ${data.marketType}.
     Motion direction must follow ${data.motion} with ${data.categoryPacing}.
     Preserve continuity of subject identity, logo placement, environment styling, and color language.
     Keep camera behavior consistent with ${data.camera}.
@@ -284,12 +309,13 @@ function buildFinalMasterPrompt(data) {
     `Using Scene S1 through S5 image keyframes and video segments, generate one final ${data.durationSeconds}-second master video.
     Keep strict sequence: HOOK -> SETUP -> REVEAL -> PROOF -> CTA.
     Maintain ${data.categoryLabel} style behavior with ${data.categoryDna}.
+    Product type: ${data.productType}. Market type: ${data.marketType}.
     Preserve tone ${data.tone}, style ${data.style}, camera direction ${data.camera}, lighting ${data.lighting}, and environment ${data.environment}.
-    Keep all must-include elements visible where relevant: ${data.mustInclude}.
+    Keep all must-include elements visible where relevant: ${data.mustInclude}. Must-include preset selected: ${data.mustIncludePreset}.
     Respect image references from Downloads: ${data.mustIncludeImages}.
     Respect custom attachment references: ${data.mustIncludeAttachments}.
     Reference links: ${data.attachmentLinks}.
-    Strictly avoid: ${data.mustAvoid}.
+    Strictly avoid: ${data.mustAvoid}. Must-avoid preset selected: ${data.mustAvoidPreset}.
     Ensure the value proposition is clear for ${data.audience} and optimized for ${data.platforms}.
     End with a clean and legible CTA: ${data.cta}.
     Customer intent to preserve: ${data.vision}.`
@@ -330,6 +356,8 @@ ${data.clientName} - ${data.projectName}
 CREATIVE DIRECTION SUMMARY
 Create a ${data.durationSeconds}-second ${data.categoryLabel} piece for ${data.platforms} featuring ${data.productName}.
 The core objective is ${data.goal}.
+Product type: ${data.productType}
+Market type: ${data.marketType}
 Target audience: ${data.audience}.
 Tone/style direction: ${data.tone}; ${data.style}.
 Customer vision: ${data.vision}
@@ -395,20 +423,24 @@ function loadDemo() {
     clientName: "NovaGlow Skincare",
     projectName: "8s Serum Launch",
     productName: "NovaGlow Vitamin C Serum",
-    goal: "drive conversion on paid social",
-    audience: "women 22-35 who buy premium skincare",
-    platforms: "TikTok, Instagram Reels, YouTube Shorts",
+    productType: "Tincture/Topical",
+    marketType: "Both adult-use + medical",
+    goal: "Drive product sales/conversions",
+    audience: "Adult-use consumers (21+)",
+    platforms: "TikTok/Reels/Shorts (vertical short-form)",
     category: "hyper_product",
     durationSeconds: "8",
-    tone: "premium, cinematic, confident",
-    style: "hyper-real luxury product commercial",
-    camera: "100mm macro hero shots, slow orbit reveal, shallow depth of field",
-    lighting: "soft high-contrast studio light with clean rim highlights",
-    environment: "minimal luxury studio with reflective surfaces and subtle atmosphere",
-    motion: "smooth controlled movement with elegant pacing",
+    tone: "Premium cinematic",
+    style: "Hyper-real product commercial",
+    camera: "Macro close-ups + slow orbit",
+    lighting: "Soft studio beauty lighting",
+    environment: "Minimal studio set",
+    motion: "Smooth and elegant pacing",
     cta: "Shop now",
+    mustIncludePreset: "Logo + packaging + hero product close-up",
     mustInclude: "accurate logo, readable label text, bottle hero close-up, brand color palette",
     attachmentLinks: "https://drive.google.com/example-folder",
+    mustAvoidPreset: "No medical cure claims",
     mustAvoid: "wrong packaging text, blur, oversaturation, busy backgrounds",
     vision:
       "The video should feel expensive and highly polished, with a strong opening visual and smooth cinematic progression into a clear conversion-focused ending.",
