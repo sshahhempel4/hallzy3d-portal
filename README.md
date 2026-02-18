@@ -5,6 +5,7 @@ This repository contains a reusable prompt framework for Renderment's workflow:
 - cinematic AI video concepts
 - ultra-detailed AI image prompts
 - stylized 3D visual concepts for ads and branded storytelling
+- dataset-driven category playbooks for six production video types
 
 The goal is to turn rough ideas into structured, production-ready prompt
 blueprints with shot direction, camera settings, lighting design, environment
@@ -16,7 +17,8 @@ detail, motion behavior, texture realism, pacing, and cinematic tone.
 - `CUSTOMER_VISION_INTAKE_FORM.md` - customer-facing form to capture vision
 - `index.html` - browser app for intake + automatic prompt package generation
 - `styles.css` - web app styling
-- `app.js` - intake processing and prompt blueprint generation logic
+- `app.js` - intake processing + category-dataset-driven prompt generation
+- `RENDERMENT_CREATIVE_WORKFLOW_DATASET.md` - full Renderment workflow dataset
 
 ## Launch the website app
 
@@ -38,13 +40,15 @@ http://localhost:8080
 
 In the app:
 
-1. Fill the intake form (or click "Load Demo Data")
-2. Click "Generate Prompt Package"
-3. Copy or download:
+1. Select a creative category preset (1-6) or use custom/hybrid.
+2. Fill the intake form (or click "Load Demo Data")
+3. Click "Generate Prompt Package"
+4. Copy or download:
    - cleaned client brief
    - ready-to-run filled prompt
    - reusable master template
    - concept direction starters
+   - workflow dataset notes
 
 ## Workflow
 

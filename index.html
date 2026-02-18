@@ -22,6 +22,7 @@
       <section class="panel">
         <h2>How to use this app</h2>
         <ol>
+          <li>Select a Renderment workflow category preset.</li>
           <li>Fill out the intake form below (or click "Load Demo Data").</li>
           <li>Click "Generate Prompt Package".</li>
           <li>
@@ -42,6 +43,58 @@
       <section class="panel">
         <h2>Customer Vision Intake</h2>
         <form id="intakeForm">
+          <fieldset>
+            <legend>0) Renderment Workflow Dataset Profile</legend>
+            <div class="grid two">
+              <label>
+                Creative Category Preset
+                <select id="creativeCategory">
+                  <option value="category1_viral_hook">
+                    Category 1: Funny AI Intro / Viral Hook Videos
+                  </option>
+                  <option value="category2_hyper_product">
+                    Category 2: Hyper-Realistic Product Videos
+                  </option>
+                  <option value="category3_pixar_3d">
+                    Category 3: 3D Animated Pixar-Style Videos
+                  </option>
+                  <option value="category4_app_brand_ads">
+                    Category 4: Cinematic App and Brand Advertisements
+                  </option>
+                  <option value="category5_gallery_showcase">
+                    Category 5: Cinematic Showcase / Gallery-Style Edits
+                  </option>
+                  <option value="category6_social_shortform">
+                    Category 6: Social Media Optimized Short-Form
+                  </option>
+                  <option value="custom">Custom / Hybrid Category</option>
+                </select>
+              </label>
+              <label>
+                Category Blend Notes (optional)
+                <input
+                  id="categoryBlendNotes"
+                  type="text"
+                  placeholder="Example: Mix Category 2 product realism with Category 1 viral hook pacing"
+                />
+              </label>
+            </div>
+            <label>
+              Category-Specific Overrides
+              <textarea
+                id="categoryOverrideNotes"
+                rows="2"
+                placeholder="Any creative direction that should override the selected category preset"
+              ></textarea>
+            </label>
+            <div class="dataset-preview-wrap">
+              <p class="hint">
+                Live preset preview (auto-injected into generated outputs):
+              </p>
+              <pre id="categoryDatasetPreview" class="dataset-preview"></pre>
+            </div>
+          </fieldset>
+
           <fieldset>
             <legend>1) Basic Project Information</legend>
             <div class="grid two">
@@ -434,6 +487,16 @@
             </button>
           </div>
           <pre id="conceptSeedsOutput" class="output"></pre>
+        </article>
+
+        <article class="output-card">
+          <div class="output-header">
+            <h3>Workflow Dataset Notes</h3>
+            <button class="button ghost copy-btn" data-target="workflowDatasetOutput" type="button">
+              Copy
+            </button>
+          </div>
+          <pre id="workflowDatasetOutput" class="output"></pre>
         </article>
       </section>
     </main>
