@@ -717,6 +717,7 @@ function buildImagePrompt(
 ) {
   return cleanMulti(
     `Create a new, original cinematic keyframe for Scene ${scene.id} (${scene.name}) covering ${scene.start}s-${scene.end}s of a ${data.durationSeconds}s ad.
+    Client/Brand: ${data.clientName}. Project: ${data.projectName}.
     Scene objective: ${beatText}.
     Innovation directive: ${innovationText}
     Composition directive: ${scene.composition}; this shot must look visually different from every other scene.
@@ -752,6 +753,7 @@ function buildVideoPrompt(
 
   return cleanMulti(
     `Generate Scene ${scene.id} (${scene.name}) video segment from ${scene.start}s-${scene.end}s using Scene ${scene.id} keyframe as primary visual anchor.
+    Client/Brand: ${data.clientName}. Project: ${data.projectName}.
     Narrative beat: ${beatText}.
     Scene innovation to execute: ${innovationText}
     Scene-specific reference image description: ${primaryRefDescription}
@@ -772,6 +774,7 @@ function buildVideoPrompt(
 function buildFinalMasterPrompt(data, references) {
   return cleanMulti(
     `Using Scene S1-S5 image keyframes and video segments, generate one final ${data.durationSeconds}s master video.
+    Client/Brand: ${data.clientName}. Project: ${data.projectName}.
     Strict sequence: HOOK -> SETUP -> REVEAL -> PROOF -> CTA.
     Each scene must remain distinct in composition and visual storytelling (no repeated framing templates).
     Keep category style lock: ${data.categoryLabel} (${data.categoryDna}).
