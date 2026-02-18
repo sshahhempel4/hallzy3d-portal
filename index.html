@@ -22,8 +22,8 @@
       <section class="card">
         <h2>Client Intake</h2>
         <p class="muted">
-          Keep this short. The app will convert it into a full ordered prompt
-          stack.
+          Fill this once. The app converts customer data into full, traceable,
+          scene-by-scene image and video prompts.
         </p>
 
         <form id="intakeForm" class="form-grid">
@@ -121,8 +121,8 @@
           </label>
 
           <label class="full">
-            Extra Notes (optional)
-            <textarea id="extraNotes" rows="3" placeholder="Any custom client requests"></textarea>
+            Customer Vision (1 short paragraph)
+            <textarea id="vision" rows="3" placeholder="What should this feel like on screen? Mention vibe, quality level, and what success looks like."></textarea>
           </label>
 
           <div class="actions full">
@@ -139,8 +139,8 @@
           <button id="copyBtn" type="button" class="btn">Copy</button>
         </div>
         <p class="muted">
-          One box only: ordered scene prompts for image generation and full
-          video generation.
+          One box only: each scene includes a complete Image Prompt + Video
+          Prompt, then one final full-video prompt.
         </p>
         <pre id="finalPromptOutput" class="output"></pre>
       </section>

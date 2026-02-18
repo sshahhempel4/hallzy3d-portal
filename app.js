@@ -1,256 +1,285 @@
-const STORAGE_KEY = "renderment_simple_prompt_builder_v1";
+const STORAGE_KEY = "renderment_simple_prompt_builder_v2";
 
 const CATEGORY_PRESETS = {
   viral_hook: {
     label: "Funny AI Intro / Viral Hook",
-    dna: "comedic, high-retention, street-level realism, twist-based reveal",
-    pacing: "fast open, sharp pattern interrupts, short dialogue energy",
-    shotBias: "handheld POV, eye-level framing, social-native movement",
-    sceneFocus: [
-      "instant conflict or curiosity trigger",
-      "relatable scenario setup",
-      "sudden product/app reveal",
-      "quick value proof beat",
-      "hard CTA finish",
+    dna: "comedic social realism, high-retention pacing, twist-to-promo storytelling",
+    pacing: "fast open with sharp pattern interrupts and energetic transitions",
+    cameraFlavor: "handheld POV framing, eye-level perspective, social-native movement",
+    sceneBeats: [
+      "an immediate conflict-or-curiosity hook that stops the scroll in under one second",
+      "a relatable setup that feels candid and native to social feeds",
+      "a sudden reveal that pivots the moment toward the product or app value",
+      "quick proof that validates the value proposition in a believable way",
+      "a crisp, high-clarity CTA close that drives immediate action",
     ],
   },
   hyper_product: {
     label: "Hyper-Real Product",
-    dna: "luxury, ultra-real, ad-grade product cinematics, logo accuracy",
-    pacing: "controlled, smooth, premium reveal progression",
-    shotBias: "macro close-ups, slow rotations, precise hero framing",
-    sceneFocus: [
-      "hero texture hook",
-      "environment and product context",
-      "primary product reveal with branding",
-      "material and claim proof details",
-      "elegant CTA lockup",
+    dna: "luxury commercial visuals, hyper-real textures, premium ad-grade product storytelling",
+    pacing: "smooth premium pacing with deliberate reveal rhythm",
+    cameraFlavor: "macro close-ups, controlled hero framing, slow cinematic movement",
+    sceneBeats: [
+      "a premium hero hook focused on texture and material detail",
+      "a refined setup that establishes product context and desirability",
+      "a signature reveal of packaging, logo, and product hero angle",
+      "proof detail emphasizing quality, ingredients, or tactile realism",
+      "a polished branded end frame with conversion-focused CTA",
     ],
   },
   pixar_3d: {
     label: "Pixar-Style 3D Animation",
-    dna: "stylized 3D, expressive character motion, bright cinematic storytelling",
-    pacing: "smooth arcs with emotional beats",
-    shotBias: "tracking cameras, layered depth staging, character emphasis",
-    sceneFocus: [
-      "character-led opening moment",
-      "world establishment",
-      "action/reveal transition",
-      "emotional payoff or proof",
-      "warm branded CTA close",
+    dna: "stylized 3D cinematic storytelling, expressive character motion, emotionally clear beats",
+    pacing: "smooth animation arcs with clear emotional progression",
+    cameraFlavor: "tracking camera, layered depth staging, character-first composition",
+    sceneBeats: [
+      "a character-led opening moment that instantly defines tone and personality",
+      "a world-establishing beat that anchors the scene environment",
+      "an action or transformation reveal tied to the core concept",
+      "a proof or payoff beat that reinforces value through animation storytelling",
+      "a warm branded close with clear narrative completion and CTA",
     ],
   },
   app_brand: {
     label: "Cinematic App/Brand Ad",
-    dna: "clean, persuasive, inspirational, message-first commercial structure",
-    pacing: "clarity-first rhythm with strong value transitions",
-    shotBias: "high-legibility framing with narrative continuity",
-    sceneFocus: [
-      "strong problem or desire hook",
-      "scenario setup",
-      "brand/app value reveal",
-      "proof and trust beat",
-      "clear conversion CTA",
+    dna: "clean commercial persuasion, modern cinematic framing, value-first storytelling",
+    pacing: "clarity-driven pacing with controlled escalation",
+    cameraFlavor: "cinematic readability, clear subject hierarchy, polished ad framing",
+    sceneBeats: [
+      "a high-impact hook centered on a relatable problem, desire, or tension",
+      "a setup that clarifies context and raises curiosity",
+      "a clear reveal of brand/app value in visual and narrative terms",
+      "proof and trust-building beat with concrete benefit clarity",
+      "a strong CTA close built for conversion",
     ],
   },
   gallery_showcase: {
     label: "Gallery-Style Showcase",
-    dna: "elegant, artistic, premium showcase, museum-like visual tone",
-    pacing: "slow cinematic admiration pacing",
-    shotBias: "tracking/pan compositions and detail close-ups",
-    sceneFocus: [
-      "prestige opening frame",
-      "detail admiration setup",
-      "hero reveal moment",
-      "social proof / emotional admiration",
-      "luxury CTA finish",
+    dna: "elegant luxury composition, artistic presentation, prestige-driven visual language",
+    pacing: "slow cinematic admiration pacing with controlled movement",
+    cameraFlavor: "smooth tracking shots, measured pans, detail-first close-ups",
+    sceneBeats: [
+      "a prestige opening frame that feels curated and high-end",
+      "an admiration setup emphasizing composition and detail",
+      "a hero reveal moment framed like a premium visual exhibit",
+      "an emotional proof beat through reactions, atmosphere, or detail focus",
+      "a refined luxury CTA finish",
     ],
   },
   social_shortform: {
     label: "Social Short-Form Optimized",
-    dna: "vertical-first, retention-driven, immediate clarity and value",
-    pacing: "rapid but readable with early hooks",
-    shotBias: "high-contrast openers, dynamic social-native motion",
-    sceneFocus: [
-      "0-1 second pattern interrupt",
-      "instant context setup",
-      "value reveal",
-      "proof stack",
-      "direct CTA ending",
+    dna: "vertical-first social storytelling, retention-optimized pacing, immediate visual clarity",
+    pacing: "rapid but readable pacing with high-impact transitions",
+    cameraFlavor: "dynamic social-native movement and strong focal hierarchy",
+    sceneBeats: [
+      "an immediate pattern interrupt in the first second",
+      "instant scenario context to lock attention",
+      "fast value reveal with clear visual focus",
+      "proof stack that reinforces utility and trust quickly",
+      "direct CTA ending optimized for action",
     ],
   },
   custom: {
     label: "Custom / Hybrid",
-    dna: "hybrid style adapted from client direction",
-    pacing: "balanced pacing tuned to campaign goal",
-    shotBias: "camera style from custom inputs",
-    sceneFocus: [
-      "hook",
-      "setup",
-      "reveal",
-      "proof",
-      "CTA",
+    dna: "hybrid visual strategy adapted from customer data",
+    pacing: "balanced pacing tuned to campaign objective",
+    cameraFlavor: "camera language defined by client direction",
+    sceneBeats: [
+      "a clear opening hook",
+      "an intuitive setup beat",
+      "a focused reveal moment",
+      "a concise proof segment",
+      "a conversion-ready CTA finish",
     ],
   },
 };
 
-const SCENE_NAMES = ["HOOK", "SETUP", "REVEAL", "PROOF", "CTA"];
-const SCENE_SPLITS = [0, 0.18, 0.38, 0.63, 0.85, 1];
+const SCENES = [
+  { id: "S1", name: "HOOK", startRatio: 0, endRatio: 0.18 },
+  { id: "S2", name: "SETUP", startRatio: 0.18, endRatio: 0.38 },
+  { id: "S3", name: "REVEAL", startRatio: 0.38, endRatio: 0.63 },
+  { id: "S4", name: "PROOF", startRatio: 0.63, endRatio: 0.85 },
+  { id: "S5", name: "CTA", startRatio: 0.85, endRatio: 1 },
+];
 
 function byId(id) {
   return document.getElementById(id);
 }
 
-function read(id, fallback = "Not provided") {
+function readRaw(id) {
   const el = byId(id);
-  if (!el) return fallback;
-  const value = (el.value || "").trim();
-  return value || fallback;
+  if (!el) return "";
+  return (el.value || "").trim();
 }
 
-function secondsRange(totalSeconds) {
-  const total = Number.isFinite(totalSeconds) && totalSeconds > 0 ? totalSeconds : 8;
-  return SCENE_SPLITS.map((p) => Number((p * total).toFixed(1)));
+function pick(value, fallback) {
+  return value ? value : fallback;
 }
 
 function cleanMulti(text) {
   return text.replace(/\s+/g, " ").trim();
 }
 
+function clampDuration(value) {
+  const parsed = Number.parseFloat(value);
+  if (!Number.isFinite(parsed)) return 8;
+  if (parsed < 3) return 3;
+  if (parsed > 60) return 60;
+  return parsed;
+}
+
+function toSceneTimes(totalSeconds) {
+  return SCENES.map((scene) => ({
+    ...scene,
+    start: Number((scene.startRatio * totalSeconds).toFixed(1)),
+    end: Number((scene.endRatio * totalSeconds).toFixed(1)),
+  }));
+}
+
 function collectInputs() {
-  const durationRaw = Number.parseFloat(read("durationSeconds", "8"));
-  const durationSeconds = Number.isFinite(durationRaw) ? durationRaw : 8;
-  const categoryKey = read("category", "custom");
+  const categoryKey = pick(readRaw("category"), "custom");
   const preset = CATEGORY_PRESETS[categoryKey] || CATEGORY_PRESETS.custom;
+  const durationSeconds = clampDuration(readRaw("durationSeconds"));
 
   return {
-    clientName: read("clientName"),
-    projectName: read("projectName"),
-    productName: read("productName"),
-    goal: read("goal"),
-    audience: read("audience"),
-    platforms: read("platforms"),
+    clientName: pick(readRaw("clientName"), "Client"),
+    projectName: pick(readRaw("projectName"), "Campaign"),
+    productName: pick(readRaw("productName"), "the featured product"),
+    goal: pick(readRaw("goal"), "create a high-performing marketing video"),
+    audience: pick(readRaw("audience"), "social media viewers"),
+    platforms: pick(readRaw("platforms"), "TikTok and Instagram Reels"),
     categoryKey,
     categoryLabel: preset.label,
     categoryDna: preset.dna,
     categoryPacing: preset.pacing,
-    categoryShotBias: preset.shotBias,
-    sceneFocus: preset.sceneFocus,
+    categoryCameraFlavor: preset.cameraFlavor,
+    sceneBeats: preset.sceneBeats,
     durationSeconds,
-    tone: read("tone"),
-    style: read("style"),
-    camera: read("camera"),
-    lighting: read("lighting"),
-    environment: read("environment"),
-    motion: read("motion"),
-    cta: read("cta"),
-    mustInclude: read("mustInclude"),
-    mustAvoid: read("mustAvoid"),
-    extraNotes: read("extraNotes"),
+    tone: pick(readRaw("tone"), "cinematic and premium"),
+    style: pick(readRaw("style"), preset.dna),
+    camera: pick(readRaw("camera"), preset.cameraFlavor),
+    lighting: pick(
+      readRaw("lighting"),
+      "cinematic key and rim lighting with clear subject separation",
+    ),
+    environment: pick(
+      readRaw("environment"),
+      "a controlled premium environment with strong visual depth",
+    ),
+    motion: pick(readRaw("motion"), preset.pacing),
+    cta: pick(readRaw("cta"), "Learn more"),
+    mustInclude: pick(
+      readRaw("mustInclude"),
+      "brand consistency, clear product readability, and accurate logo treatment",
+    ),
+    mustAvoid: pick(
+      readRaw("mustAvoid"),
+      "blurry output, warped logos, poor texture detail, and visual artifacts",
+    ),
+    vision: pick(
+      readRaw("vision"),
+      "The final output should feel premium, clear, engaging, and conversion-ready.",
+    ),
   };
 }
 
-function buildScenePromptBlock(data, sceneIndex, start, end) {
-  const sceneName = SCENE_NAMES[sceneIndex];
-  const sceneIntent = data.sceneFocus[sceneIndex] || "scene progression";
-
-  const imagePrompt = cleanMulti(
-    `Create keyframe image for Scene ${sceneIndex + 1} (${sceneName}), ${start}s-${end}s of an ${data.durationSeconds}s ad.
-    Subject: ${data.productName}.
-    Creative category: ${data.categoryLabel} (${data.categoryDna}).
-    Intent: ${sceneIntent}.
-    Tone: ${data.tone}.
-    Style: ${data.style}.
-    Camera: ${data.camera} with ${data.categoryShotBias}.
-    Lighting: ${data.lighting}.
-    Environment: ${data.environment}.
-    Keep brand requirements: ${data.mustInclude}.
-    Avoid: ${data.mustAvoid}.
-    Audience: ${data.audience}.
-    Platform-safe composition for ${data.platforms}.
-    Ultra clear product/logo readability and cinematic detail.`
+function buildImagePrompt(data, scene, beatText) {
+  return cleanMulti(
+    `Create a cinematic still keyframe for Scene ${scene.id} (${scene.name}) representing ${scene.start}s to ${scene.end}s of a ${data.durationSeconds}-second ad.
+    The frame must communicate ${beatText}.
+    Feature ${data.productName} as the visual priority, designed for ${data.audience}.
+    Keep the overall tone ${data.tone} and style ${data.style}, aligned with ${data.categoryLabel} direction.
+    Camera treatment should follow ${data.camera}, with ${data.categoryCameraFlavor}.
+    Lighting should follow ${data.lighting}.
+    Environment should follow ${data.environment}.
+    The frame must include ${data.mustInclude}.
+    Compose for ${data.platforms} with strong focal hierarchy, premium texture clarity, and readable brand details.
+    Creative intent from customer: ${data.vision}.`
   );
+}
 
-  const videoPrompt = cleanMulti(
-    `Animate Scene ${sceneIndex + 1} (${sceneName}) from ${start}s to ${end}s using the keyframe as visual anchor.
-    Motion behavior: ${data.motion} with ${data.categoryPacing}.
-    Keep continuity of subject, color palette, logo placement, and environment.
-    Push scene intent: ${sceneIntent}.
-    Ensure this segment clearly supports campaign goal: ${data.goal}.
-    End this scene with a clean transition into Scene ${sceneIndex + 2 > 5 ? 5 : sceneIndex + 2}.`
+function buildVideoPrompt(data, scene, nextScene, beatText) {
+  const transitionLine = nextScene
+    ? `Transition smoothly into Scene ${nextScene.id} (${nextScene.name}) while preserving color, framing logic, and subject continuity.`
+    : "Resolve into a clean final hold that sets up the CTA lockup without visual clutter.";
+
+  return cleanMulti(
+    `Generate the Scene ${scene.id} (${scene.name}) video segment from ${scene.start}s to ${scene.end}s using the matching keyframe as the visual anchor.
+    This shot should express ${beatText}.
+    Motion direction must follow ${data.motion} with ${data.categoryPacing}.
+    Preserve continuity of subject identity, logo placement, environment styling, and color language.
+    Keep camera behavior consistent with ${data.camera}.
+    Maintain lighting consistency with ${data.lighting}.
+    Ensure the segment clearly supports campaign goal: ${data.goal}.
+    ${transitionLine}`
   );
+}
 
-  return `SCENE ${sceneIndex + 1} - ${sceneName} (${start}s-${end}s)
-Image prompt:
-"${imagePrompt}"
+function buildFinalMasterPrompt(data) {
+  return cleanMulti(
+    `Using Scene S1 through S5 image keyframes and video segments, generate one final ${data.durationSeconds}-second master video.
+    Keep strict sequence: HOOK -> SETUP -> REVEAL -> PROOF -> CTA.
+    Maintain ${data.categoryLabel} style behavior with ${data.categoryDna}.
+    Preserve tone ${data.tone}, style ${data.style}, camera direction ${data.camera}, lighting ${data.lighting}, and environment ${data.environment}.
+    Keep all must-include elements visible where relevant: ${data.mustInclude}.
+    Strictly avoid: ${data.mustAvoid}.
+    Ensure the value proposition is clear for ${data.audience} and optimized for ${data.platforms}.
+    End with a clean and legible CTA: ${data.cta}.
+    Customer intent to preserve: ${data.vision}.`
+  );
+}
 
-Video shot prompt:
-"${videoPrompt}"`;
+function buildNegativePrompt(data) {
+  return cleanMulti(
+    `blurry subject, warped or incorrect logos, wrong packaging text, low-resolution textures, inconsistent lighting direction,
+    muddy shadows, clipped highlights, oversaturation, banding, flicker, temporal jitter, ghosting, duplicate objects,
+    unreadable CTA text, poor subject isolation, off-brand color palette, visual clutter, incorrect anatomy`
+  );
 }
 
 function buildFinalPromptStack(data) {
-  const marks = secondsRange(data.durationSeconds);
-  const sceneBlocks = [];
+  const scenes = toSceneTimes(data.durationSeconds);
+  const sceneBlocks = scenes.map((scene, index) => {
+    const beatText = data.sceneBeats[index] || "the intended scene beat";
+    const nextScene = scenes[index + 1] || null;
+    const imagePrompt = buildImagePrompt(data, scene, beatText);
+    const videoPrompt = buildVideoPrompt(data, scene, nextScene, beatText);
 
-  for (let i = 0; i < 5; i += 1) {
-    sceneBlocks.push(buildScenePromptBlock(data, i, marks[i], marks[i + 1]));
-  }
+    return `SCENE ${scene.id} - ${scene.name} (${scene.start}s-${scene.end}s)
+Trace ID: IMG_${scene.id} -> VID_${scene.id}
 
-  const finalAssemblyPrompt = cleanMulti(
-    `Using Scene 1-5 keyframes and scene prompts, generate one final ${data.durationSeconds}-second video.
-    Story order must stay exact: HOOK -> SETUP -> REVEAL -> PROOF -> CTA.
-    Category style lock: ${data.categoryLabel} (${data.categoryDna}).
-    Camera direction: ${data.camera}.
-    Lighting direction: ${data.lighting}.
-    Environment direction: ${data.environment}.
-    Motion/pacing: ${data.motion} with ${data.categoryPacing}.
-    Preserve must-include elements: ${data.mustInclude}.
-    Strictly avoid: ${data.mustAvoid}.
-    Final CTA: ${data.cta}.
-    Optimize for ${data.platforms}.
-    Output should look premium, polished, and ad-ready.`
-  );
+Image Prompt:
+"${imagePrompt}"
 
-  const negativePrompt = cleanMulti(
-    `low detail, blurry subject, logo distortion, wrong text on packaging, inconsistent brand colors,
-    low-resolution textures, messy composition, overexposed highlights, crushed shadows,
-    jitter artifacts, flicker, duplicated objects, awkward anatomy, unreadable CTA text`
-  );
+Video Prompt:
+"${videoPrompt}"`;
+  });
 
-  return `FINAL RENDERMENT PROMPT STACK
+  return `RENDERMENT FINAL SCENE PROMPT STACK
 
-CLIENT SNAPSHOT
-- Client: ${data.clientName}
-- Project: ${data.projectName}
-- Product/Subject: ${data.productName}
-- Goal: ${data.goal}
-- Audience: ${data.audience}
-- Platform(s): ${data.platforms}
-- Category: ${data.categoryLabel}
-- Duration: ${data.durationSeconds}s
-- Tone: ${data.tone}
-- Style: ${data.style}
-- Camera: ${data.camera}
-- Lighting: ${data.lighting}
-- Environment: ${data.environment}
-- Motion: ${data.motion}
-- Must Include: ${data.mustInclude}
-- Must Avoid: ${data.mustAvoid}
-- CTA: ${data.cta}
-- Extra Notes: ${data.extraNotes}
+PROJECT
+${data.clientName} - ${data.projectName}
 
-GENERATION ORDER (FOLLOW EXACTLY)
-1) Generate Scene 1-5 IMAGE keyframes first.
-2) Generate Scene 1-5 VIDEO shots second.
-3) Generate FINAL FULL VIDEO from all scene references.
+CREATIVE DIRECTION SUMMARY
+Create a ${data.durationSeconds}-second ${data.categoryLabel} piece for ${data.platforms} featuring ${data.productName}.
+The core objective is ${data.goal}.
+Target audience: ${data.audience}.
+Tone/style direction: ${data.tone}; ${data.style}.
+Customer vision: ${data.vision}
+
+PRODUCTION ORDER (FOLLOW EXACTLY)
+1) Generate all image keyframes first (IMG_S1 to IMG_S5).
+2) Generate each matching video segment second (VID_S1 to VID_S5).
+3) Assemble final master video last.
 
 ${sceneBlocks.join("\n\n")}
 
-FINAL FULL VIDEO PROMPT (${data.durationSeconds}s MASTER)
-"${finalAssemblyPrompt}"
+FINAL MASTER VIDEO PROMPT
+Trace ID: VID_MASTER
+"${buildFinalMasterPrompt(data)}"
 
-NEGATIVE PROMPT
-"${negativePrompt}"`;
+GLOBAL NEGATIVE PROMPT
+"${buildNegativePrompt(data)}"`;
 }
 
 function saveDraft() {
@@ -273,7 +302,7 @@ function loadDraft() {
       if (field) field.value = value;
     });
   } catch (_error) {
-    // Ignore invalid cache and continue with clean form.
+    // Ignore invalid cache and keep default form state.
   }
 }
 
@@ -289,21 +318,22 @@ function loadDemo() {
     clientName: "NovaGlow Skincare",
     projectName: "8s Serum Launch",
     productName: "NovaGlow Vitamin C Serum",
-    goal: "Drive conversion on paid social",
-    audience: "Women 22-35 interested in premium skincare",
+    goal: "drive conversion on paid social",
+    audience: "women 22-35 who buy premium skincare",
     platforms: "TikTok, Instagram Reels, YouTube Shorts",
     category: "hyper_product",
     durationSeconds: "8",
-    tone: "premium, cinematic, clean",
-    style: "hyper-real macro product commercial",
-    camera: "macro close-ups, slow orbit reveal, shallow depth of field",
-    lighting: "soft high-contrast studio with cool rim highlights",
-    environment: "minimal luxury studio with reflective surfaces",
-    motion: "smooth, controlled, elegant pacing",
+    tone: "premium, cinematic, confident",
+    style: "hyper-real luxury product commercial",
+    camera: "100mm macro hero shots, slow orbit reveal, shallow depth of field",
+    lighting: "soft high-contrast studio light with clean rim highlights",
+    environment: "minimal luxury studio with reflective surfaces and subtle atmosphere",
+    motion: "smooth controlled movement with elegant pacing",
     cta: "Shop now",
-    mustInclude: "logo end-card, bottle hero close-up, claim text: dermatologist tested",
-    mustAvoid: "wrong label text, oversaturation, busy background",
-    extraNotes: "Keep all packaging/logo details highly accurate.",
+    mustInclude: "accurate logo, readable label text, bottle hero close-up, brand color palette",
+    mustAvoid: "wrong packaging text, blur, oversaturation, busy backgrounds",
+    vision:
+      "The video should feel expensive and highly polished, with a strong opening visual and smooth cinematic progression into a clear conversion-focused ending.",
   };
 
   Object.entries(demo).forEach(([id, value]) => {

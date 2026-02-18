@@ -12,6 +12,11 @@ The final output is ordered exactly for your pipeline:
 2. video prompts (scene by scene)
 3. full final video generation prompt
 
+Each scene includes two complete copy-ready prompts:
+
+- one full image prompt
+- one full video prompt
+
 ## Files
 
 - `index.html` - simple client intake + one output box
