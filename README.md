@@ -18,7 +18,8 @@ This is a **resource pack shader override** using Minecraft Java's built-in shad
 - Compatible range: **Java 1.21.0 through 1.21.11**
 - `pack.mcmeta` declares:
   - `pack_format: 75`
-  - `supported_formats: 34..75`
+  - `supported_formats: [34, 75]`
+- Uses an overlay split so old and new 1.21 shader pipelines each get matching shader files.
 
 ## Download file
 
@@ -42,6 +43,7 @@ After build, use:
 - If Minecraft says **incompatible**, confirm you are on Java **1.21.x**.
 - If Minecraft says **broken**, remove old copies of this pack from `resourcepacks` and keep only the latest zip.
 - Do not extract the zip. Put the zip file itself into the `resourcepacks` folder.
+- Disable other shader/resource packs while testing (pack conflicts can trigger shader compile errors).
 
 ## Source files
 
@@ -50,3 +52,5 @@ Pack source lives in:
 - `java-vanilla-shader-pack/pack.mcmeta`
 - `java-vanilla-shader-pack/assets/minecraft/shaders/include/fog.glsl`
 - `java-vanilla-shader-pack/assets/minecraft/shaders/include/light.glsl`
+- `java-vanilla-shader-pack/overlays/compat_34_68/assets/minecraft/shaders/include/fog.glsl`
+- `java-vanilla-shader-pack/overlays/compat_34_68/assets/minecraft/shaders/include/light.glsl`

@@ -1,4 +1,4 @@
-#version 330
+#version 150
 
 #define MINECRAFT_LIGHT_POWER   (0.66)
 #define MINECRAFT_AMBIENT_LIGHT (0.36)
