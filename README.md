@@ -52,5 +52,5 @@ Pack source lives in:
 - `java-vanilla-shader-pack/pack.mcmeta`
 - `java-vanilla-shader-pack/assets/minecraft/shaders/include/fog.glsl`
 - `java-vanilla-shader-pack/assets/minecraft/shaders/include/light.glsl`
-- `java-vanilla-shader-pack/overlays/compat_34_68/assets/minecraft/shaders/include/fog.glsl`
-- `java-vanilla-shader-pack/overlays/compat_34_68/assets/minecraft/shaders/include/light.glsl`
+- `java-vanilla-shader-pack/compat_34_68/assets/minecraft/shaders/include/fog.glsl`
+- `java-vanilla-shader-pack/compat_34_68/assets/minecraft/shaders/include/light.glsl`
