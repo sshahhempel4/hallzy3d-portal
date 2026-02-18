@@ -116,6 +116,32 @@
           </label>
 
           <label class="full">
+            Must Include Attachments (custom reference files)
+            <input
+              id="mustIncludeAttachments"
+              type="file"
+              multiple
+              accept=".png,.jpg,.jpeg,.webp,.gif,.mp4,.mov,.pdf,.svg,.obj,.fbx,.glb,.gltf,.usd,.usdz,.blend,.zip"
+            />
+            <span class="field-note">
+              Attach brand/logo/reference files here. Files stay local in your browser session.
+            </span>
+          </label>
+
+          <label class="full">
+            Attachment Links (Drive/Dropbox/Figma/etc.)
+            <input
+              id="attachmentLinks"
+              type="text"
+              placeholder="Paste links to external reference files/folders"
+            />
+          </label>
+
+          <div id="attachmentList" class="attachment-list full">
+            No attachment files selected.
+          </div>
+
+          <label class="full">
             Must Avoid
             <textarea id="mustAvoid" rows="2" placeholder="Wrong logo, blurry labels, over-saturation, medical claims"></textarea>
           </label>

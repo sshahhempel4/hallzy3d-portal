@@ -102,6 +102,8 @@ const SCENES = [
   { id: "S5", name: "CTA", startRatio: 0.85, endRatio: 1 },
 ];
 
+let selectedAttachmentNames = [];
+
 function byId(id) {
   return document.getElementById(id);
 }
@@ -118,6 +120,32 @@ function pick(value, fallback) {
 
 function cleanMulti(text) {
   return text.replace(/\s+/g, " ").trim();
+}
+
+function currentAttachmentNames() {
+  const input = byId("mustIncludeAttachments");
+  if (!input || !input.files) {
+    return [];
+  }
+  return [...input.files].map((file) => file.name).filter(Boolean);
+}
+
+function attachmentSummary() {
+  if (!selectedAttachmentNames.length) {
+    return "None provided";
+  }
+  return selectedAttachmentNames.join(", ");
+}
+
+function updateAttachmentList() {
+  selectedAttachmentNames = currentAttachmentNames();
+  const list = byId("attachmentList");
+  if (!list) {
+    return;
+  }
+  list.textContent = selectedAttachmentNames.length
+    ? `Attached files: ${selectedAttachmentNames.join(", ")}`
+    : "No attachment files selected.";
 }
 
 function clampDuration(value) {
@@ -172,6 +200,8 @@ function collectInputs() {
       readRaw("mustInclude"),
       "brand consistency, clear product readability, and accurate logo treatment",
     ),
+    mustIncludeAttachments: attachmentSummary(),
+    attachmentLinks: pick(readRaw("attachmentLinks"), "None provided"),
     mustAvoid: pick(
       readRaw("mustAvoid"),
       "blurry output, warped logos, poor texture detail, and visual artifacts",
@@ -193,6 +223,8 @@ function buildImagePrompt(data, scene, beatText) {
     Lighting should follow ${data.lighting}.
     Environment should follow ${data.environment}.
     The frame must include ${data.mustInclude}.
+    Custom element attachments to honor: ${data.mustIncludeAttachments}.
+    Attachment links: ${data.attachmentLinks}.
     Compose for ${data.platforms} with strong focal hierarchy, premium texture clarity, and readable brand details.
     Creative intent from customer: ${data.vision}.`
   );
@@ -211,6 +243,8 @@ function buildVideoPrompt(data, scene, nextScene, beatText) {
     Keep camera behavior consistent with ${data.camera}.
     Maintain lighting consistency with ${data.lighting}.
     Ensure the segment clearly supports campaign goal: ${data.goal}.
+    Keep custom elements from attachments consistent: ${data.mustIncludeAttachments}.
+    Attachment links: ${data.attachmentLinks}.
     ${transitionLine}`
   );
 }
@@ -222,6 +256,8 @@ function buildFinalMasterPrompt(data) {
     Maintain ${data.categoryLabel} style behavior with ${data.categoryDna}.
     Preserve tone ${data.tone}, style ${data.style}, camera direction ${data.camera}, lighting ${data.lighting}, and environment ${data.environment}.
     Keep all must-include elements visible where relevant: ${data.mustInclude}.
+    Respect custom attachment references: ${data.mustIncludeAttachments}.
+    Reference links: ${data.attachmentLinks}.
     Strictly avoid: ${data.mustAvoid}.
     Ensure the value proposition is clear for ${data.audience} and optimized for ${data.platforms}.
     End with a clean and legible CTA: ${data.cta}.
@@ -266,6 +302,8 @@ The core objective is ${data.goal}.
 Target audience: ${data.audience}.
 Tone/style direction: ${data.tone}; ${data.style}.
 Customer vision: ${data.vision}
+Must-include attachments: ${data.mustIncludeAttachments}
+Attachment links: ${data.attachmentLinks}
 
 PRODUCTION ORDER (FOLLOW EXACTLY)
 1) Generate all image keyframes first (IMG_S1 to IMG_S5).
@@ -287,7 +325,10 @@ function saveDraft() {
   const fields = form.querySelectorAll("input, textarea, select");
   const draft = {};
   fields.forEach((field) => {
-    if (field.id) draft[field.id] = field.value;
+    if (!field.id || field.type === "file") {
+      return;
+    }
+    draft[field.id] = field.value;
   });
   localStorage.setItem(STORAGE_KEY, JSON.stringify(draft));
 }
@@ -311,6 +352,8 @@ function clearForm() {
   byId("intakeForm").reset();
   byId("finalPromptOutput").textContent = "";
   localStorage.removeItem(STORAGE_KEY);
+  selectedAttachmentNames = [];
+  updateAttachmentList();
 }
 
 function loadDemo() {
@@ -331,6 +374,7 @@ function loadDemo() {
     motion: "smooth controlled movement with elegant pacing",
     cta: "Shop now",
     mustInclude: "accurate logo, readable label text, bottle hero close-up, brand color palette",
+    attachmentLinks: "https://drive.google.com/example-folder",
     mustAvoid: "wrong packaging text, blur, oversaturation, busy backgrounds",
     vision:
       "The video should feel expensive and highly polished, with a strong opening visual and smooth cinematic progression into a clear conversion-focused ending.",
@@ -384,8 +428,13 @@ function init() {
   byId("loadDemoBtn").addEventListener("click", loadDemo);
   byId("clearBtn").addEventListener("click", clearForm);
   byId("copyBtn").addEventListener("click", copyOutput);
+  byId("mustIncludeAttachments").addEventListener("change", () => {
+    updateAttachmentList();
+    saveDraft();
+  });
 
   loadDraft();
+  updateAttachmentList();
 }
 
 init();

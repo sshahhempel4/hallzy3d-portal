@@ -3,6 +3,7 @@
 This repo contains a simplified website app for your production workflow:
 
 - client fills a short intake
+- client can attach custom reference files in Must Include
 - you generate one final prompt stack
 - you copy from one box and run production
 
@@ -16,6 +17,9 @@ Each scene includes two complete copy-ready prompts:
 
 - one full image prompt
 - one full video prompt
+
+Attachment filenames and attachment links are injected into each scene prompt
+and the final master prompt to keep custom elements traceable.
 
 ## Files
 
