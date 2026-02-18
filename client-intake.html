@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rendermint Customer Intake Form</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <div class="container">
+        <p class="eyebrow">Rendermint</p>
+        <h1>Customer Vision Intake Form</h1>
+        <p class="subtitle">
+          Fill this form to share your vision. This captures all key creative
+          inputs needed for scene-by-scene image and video prompt generation.
+        </p>
+      </div>
+    </header>
+
+    <main class="container layout">
+      <section class="card">
+        <h2>Project Details</h2>
+        <p class="muted">
+          Mostly dropdowns for quick and simple completion. Use text fields only
+          when needed. If unsure, pick the closest option and continue.
+        </p>
+
+        <form id="customerIntakeForm" class="form-grid">
+          <label>
+            Brand / Company Name
+            <input id="clientName" type="text" placeholder="Your brand name" />
+          </label>
+
+          <label>
+            Project Name
+            <input id="projectName" type="text" placeholder="Campaign or project title" />
+          </label>
+
+          <label>
+            Product / Service / Subject
+            <input id="productName" type="text" placeholder="What are we creating visuals for?" />
+            <span class="field-note">
+              Optional custom name (example: "Blue Dream Live Resin Vape")
+            </span>
+          </label>
+
+          <label>
+            Product Type
+            <select id="productType">
+              <option value="">Select one</option>
+              <option value="Flower">Flower</option>
+              <option value="Pre-roll">Pre-roll</option>
+              <option value="Vape">Vape</option>
+              <option value="Edibles">Edibles</option>
+              <option value="Concentrates">Concentrates</option>
+              <option value="Beverage">Beverage</option>
+              <option value="Tincture/Topical">Tincture/Topical</option>
+              <option value="Brand story / service">Brand story / service</option>
+              <option value="App / platform">App / platform</option>
+              <option value="Other">Other</option>
+            </select>
+          </label>
+
+          <label>
+            Market Type
+            <select id="marketType">
+              <option value="">Select one</option>
+              <option value="Adult-use recreational">Adult-use recreational</option>
+              <option value="Medical cannabis">Medical cannabis</option>
+              <option value="Both adult-use + medical">Both adult-use + medical</option>
+              <option value="Non-cannabis general">Non-cannabis general</option>
+            </select>
+          </label>
+
+          <label>
+            Main Goal
+            <select id="goal">
+              <option value="">Select one</option>
+              <option value="Drive product sales/conversions">Drive product sales/conversions</option>
+              <option value="Launch a new product/strain">Launch a new product/strain</option>
+              <option value="Increase brand awareness">Increase brand awareness</option>
+              <option value="Promote dispensary/store traffic">Promote dispensary/store traffic</option>
+              <option value="Generate app downloads/signups">Generate app downloads/signups</option>
+              <option value="Educate customers on benefits/how-to">Educate customers on benefits/how-to</option>
+              <option value="Other / custom goal">Other / custom goal</option>
+            </select>
+          </label>
+
+          <label>
+            Target Audience
+            <select id="audience">
+              <option value="">Select one</option>
+              <option value="Adult-use consumers (21+)">Adult-use consumers (21+)</option>
+              <option value="Medical cannabis patients">Medical cannabis patients</option>
+              <option value="Cannabis-curious new users">Cannabis-curious new users</option>
+              <option value="Dispensary shoppers">Dispensary shoppers</option>
+              <option value="Budtenders and retail staff">Budtenders and retail staff</option>
+              <option value="Brand partners / wholesale buyers">Brand partners / wholesale buyers</option>
+              <option value="Existing customers / loyalty audience">Existing customers / loyalty audience</option>
+              <option value="Mixed audience (broad 21+)">Mixed audience (broad 21+)</option>
+            </select>
+          </label>
+
+          <label>
+            Platform(s)
+            <select id="platforms">
+              <option value="">Select one</option>
+              <option value="TikTok/Reels/Shorts (vertical short-form)">TikTok/Reels/Shorts (vertical short-form)</option>
+              <option value="Meta Ads (Instagram/Facebook ads)">Meta Ads (Instagram/Facebook ads)</option>
+              <option value="YouTube (short + long form)">YouTube (short + long form)</option>
+              <option value="Website / landing page hero">Website / landing page hero</option>
+              <option value="In-store display / loop">In-store display / loop</option>
+              <option value="Mixed channel campaign">Mixed channel campaign</option>
+            </select>
+          </label>
+
+          <label>
+            Compliance Guardrail
+            <select id="compliancePreset">
+              <option value="">Select one</option>
+              <option value="21+ audience only language">21+ audience only language</option>
+              <option value="No medical cure claims">No medical cure claims</option>
+              <option value="No on-screen consumption">No on-screen consumption</option>
+              <option value="Follow state-safe cannabis ad language">Follow state-safe cannabis ad language</option>
+              <option value="Standard commercial compliance">Standard commercial compliance</option>
+            </select>
+          </label>
+
+          <label>
+            Creative Category
+            <select id="category">
+              <option value="viral_hook">Funny AI Intro / Viral Hook</option>
+              <option value="hyper_product">Hyper-Real Product</option>
+              <option value="pixar_3d">Pixar-Style 3D Animation</option>
+              <option value="app_brand">Cinematic App/Brand Ad</option>
+              <option value="gallery_showcase">Gallery-Style Showcase</option>
+              <option value="social_shortform">Social Short-Form Optimized</option>
+              <option value="custom">Custom / Hybrid</option>
+            </select>
+          </label>
+
+          <label>
+            Desired Video Length (seconds)
+            <select id="durationSeconds">
+              <option value="6">6</option>
+              <option value="8" selected>8</option>
+              <option value="10">10</option>
+              <option value="15">15</option>
+              <option value="30">30</option>
+            </select>
+          </label>
+
+          <label>
+            Tone
+            <select id="tone">
+              <option value="">Select one</option>
+              <option value="Premium cinematic">Premium cinematic</option>
+              <option value="Fun / humorous">Fun / humorous</option>
+              <option value="Educational / informative">Educational / informative</option>
+              <option value="Bold / high-energy">Bold / high-energy</option>
+              <option value="Calm / wellness-focused">Calm / wellness-focused</option>
+              <option value="Luxury / minimal">Luxury / minimal</option>
+              <option value="Authentic / documentary-style">Authentic / documentary-style</option>
+            </select>
+          </label>
+
+          <label>
+            Visual Style
+            <select id="style">
+              <option value="">Select one</option>
+              <option value="Hyper-real product commercial">Hyper-real product commercial</option>
+              <option value="Handheld POV social ad">Handheld POV social ad</option>
+              <option value="Pixar-style stylized 3D">Pixar-style stylized 3D</option>
+              <option value="Clean studio product showcase">Clean studio product showcase</option>
+              <option value="Lifestyle + product integration">Lifestyle + product integration</option>
+              <option value="Gallery-style luxury showcase">Gallery-style luxury showcase</option>
+              <option value="Cartoon-to-real transformation">Cartoon-to-real transformation</option>
+            </select>
+          </label>
+
+          <label>
+            Camera Feel
+            <select id="camera">
+              <option value="">Select one</option>
+              <option value="Macro close-ups + slow orbit">Macro close-ups + slow orbit</option>
+              <option value="Handheld eye-level social framing">Handheld eye-level social framing</option>
+              <option value="Smooth cinematic dolly + hero reveal">Smooth cinematic dolly + hero reveal</option>
+              <option value="Static clean product framing">Static clean product framing</option>
+              <option value="Fast kinetic movement + punch-in cuts">Fast kinetic movement + punch-in cuts</option>
+              <option value="Mixed camera language (auto by scene)">Mixed camera language (auto by scene)</option>
+            </select>
+          </label>
+
+          <label>
+            Lighting Mood
+            <select id="lighting">
+              <option value="">Select one</option>
+              <option value="Soft studio beauty lighting">Soft studio beauty lighting</option>
+              <option value="High-contrast dramatic cinematic lighting">High-contrast dramatic cinematic lighting</option>
+              <option value="Natural daylight realism">Natural daylight realism</option>
+              <option value="Neon stylized color lighting">Neon stylized color lighting</option>
+              <option value="Clean bright commercial lighting">Clean bright commercial lighting</option>
+              <option value="Moody low-key atmosphere">Moody low-key atmosphere</option>
+            </select>
+          </label>
+
+          <label>
+            Scene Location / Environment
+            <select id="environment">
+              <option value="">Select one</option>
+              <option value="Minimal studio set">Minimal studio set</option>
+              <option value="Dispensary retail environment">Dispensary retail environment</option>
+              <option value="Lifestyle home interior">Lifestyle home interior</option>
+              <option value="Urban street / outdoor">Urban street / outdoor</option>
+              <option value="Abstract CGI environment">Abstract CGI environment</option>
+              <option value="Gallery / exhibition space">Gallery / exhibition space</option>
+            </select>
+          </label>
+
+          <label>
+            Video Speed / Energy
+            <select id="motion">
+              <option value="">Select one</option>
+              <option value="Smooth and elegant pacing">Smooth and elegant pacing</option>
+              <option value="Fast retention-focused cuts">Fast retention-focused cuts</option>
+              <option value="Balanced cinematic pacing">Balanced cinematic pacing</option>
+              <option value="High-energy social pacing">High-energy social pacing</option>
+              <option value="Slow premium reveal pacing">Slow premium reveal pacing</option>
+            </select>
+          </label>
+
+          <label>
+            What should viewers do?
+            <select id="cta">
+              <option value="">Select one</option>
+              <option value="Shop now">Shop now</option>
+              <option value="Order now">Order now</option>
+              <option value="Find a dispensary">Find a dispensary</option>
+              <option value="Learn more">Learn more</option>
+              <option value="Download app">Download app</option>
+              <option value="Book consultation">Book consultation</option>
+              <option value="Follow for updates">Follow for updates</option>
+            </select>
+          </label>
+
+          <label class="full">
+            What must appear in the video?
+            <select id="mustIncludePreset">
+              <option value="">Select one</option>
+              <option value="Logo + packaging + hero product close-up">Logo + packaging + hero product close-up</option>
+              <option value="Strain/product name + key potency callout">Strain/product name + key potency callout</option>
+              <option value="Product in-hand lifestyle shot">Product in-hand lifestyle shot</option>
+              <option value="Macro texture shot + hero end card">Macro texture shot + hero end card</option>
+              <option value="Brand color palette + typography lockup">Brand color palette + typography lockup</option>
+              <option value="Custom">Custom</option>
+            </select>
+          </label>
+
+          <label class="full">
+            Must Include (optional custom notes)
+            <textarea id="mustInclude" rows="2" placeholder="Optional custom must-include notes"></textarea>
+          </label>
+
+          <label class="full">
+            Attach Reference Images (from your device / Downloads)
+            <input id="mustIncludeImages" type="file" multiple accept="image/*" />
+            <span class="field-note">
+              Select any reference images you want the team to follow.
+            </span>
+          </label>
+
+          <div id="imageAttachmentList" class="attachment-list full">
+            No reference images selected.
+          </div>
+
+          <label class="full">
+            Attach Additional Files (optional)
+            <input
+              id="mustIncludeAttachments"
+              type="file"
+              multiple
+              accept=".png,.jpg,.jpeg,.webp,.gif,.mp4,.mov,.pdf,.svg,.obj,.fbx,.glb,.gltf,.usd,.usdz,.blend,.zip"
+            />
+            <span class="field-note">
+              Optional: logos, brand kits, docs, 3D files, or other references.
+            </span>
+          </label>
+
+          <div id="attachmentList" class="attachment-list full">
+            No additional files selected.
+          </div>
+
+          <label class="full">
+            Attachment Links (Drive/Dropbox/Figma/etc.)
+            <input id="attachmentLinks" type="text" placeholder="Paste links to folders or files" />
+          </label>
+
+          <label class="full">
+            What should we avoid?
+            <select id="mustAvoidPreset">
+              <option value="">Select one</option>
+              <option value="No medical cure claims">No medical cure claims</option>
+              <option value="No under-21 imagery">No under-21 imagery</option>
+              <option value="No visible consumption on screen">No visible consumption on screen</option>
+              <option value="No cluttered text overlays">No cluttered text overlays</option>
+              <option value="No oversaturated or grainy look">No oversaturated or grainy look</option>
+              <option value="Custom">Custom</option>
+            </select>
+          </label>
+
+          <label class="full">
+            Must Avoid (optional custom notes)
+            <textarea id="mustAvoid" rows="2" placeholder="Optional custom must-avoid notes"></textarea>
+          </label>
+
+          <label class="full">
+            Vision Summary
+            <textarea id="vision" rows="3" placeholder="Describe how you want the final result to feel on screen"></textarea>
+          </label>
+
+          <div class="actions full">
+            <button id="copySubmissionBtn" type="button" class="btn primary">
+              Copy Submission
+            </button>
+            <button id="downloadSubmissionBtn" type="button" class="btn">
+              Download Submission
+            </button>
+            <button id="clearFormBtn" type="button" class="btn ghost">
+              Clear
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2>Submission Preview</h2>
+        <p class="muted">
+          This text can be copied or downloaded and sent back to Rendermint.
+        </p>
+        <pre id="submissionPreview" class="output"></pre>
+      </section>
+    </main>
+
+    <script src="client-intake.js"></script>
+  </body>
+</html>
