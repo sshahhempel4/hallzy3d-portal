@@ -103,6 +103,7 @@ const SCENES = [
 ];
 
 let selectedAttachmentNames = [];
+let selectedImageAttachmentNames = [];
 
 function byId(id) {
   return document.getElementById(id);
@@ -130,11 +131,26 @@ function currentAttachmentNames() {
   return [...input.files].map((file) => file.name).filter(Boolean);
 }
 
+function currentImageAttachmentNames() {
+  const input = byId("mustIncludeImages");
+  if (!input || !input.files) {
+    return [];
+  }
+  return [...input.files].map((file) => file.name).filter(Boolean);
+}
+
 function attachmentSummary() {
   if (!selectedAttachmentNames.length) {
     return "None provided";
   }
   return selectedAttachmentNames.join(", ");
+}
+
+function imageAttachmentSummary() {
+  if (!selectedImageAttachmentNames.length) {
+    return "None provided";
+  }
+  return selectedImageAttachmentNames.join(", ");
 }
 
 function updateAttachmentList() {
@@ -146,6 +162,17 @@ function updateAttachmentList() {
   list.textContent = selectedAttachmentNames.length
     ? `Attached files: ${selectedAttachmentNames.join(", ")}`
     : "No attachment files selected.";
+}
+
+function updateImageAttachmentList() {
+  selectedImageAttachmentNames = currentImageAttachmentNames();
+  const list = byId("imageAttachmentList");
+  if (!list) {
+    return;
+  }
+  list.textContent = selectedImageAttachmentNames.length
+    ? `Images selected from Downloads: ${selectedImageAttachmentNames.join(", ")}`
+    : "No image files selected from Downloads.";
 }
 
 function clampDuration(value) {
@@ -200,6 +227,7 @@ function collectInputs() {
       readRaw("mustInclude"),
       "brand consistency, clear product readability, and accurate logo treatment",
     ),
+    mustIncludeImages: imageAttachmentSummary(),
     mustIncludeAttachments: attachmentSummary(),
     attachmentLinks: pick(readRaw("attachmentLinks"), "None provided"),
     mustAvoid: pick(
@@ -223,6 +251,7 @@ function buildImagePrompt(data, scene, beatText) {
     Lighting should follow ${data.lighting}.
     Environment should follow ${data.environment}.
     The frame must include ${data.mustInclude}.
+    Download image references to honor: ${data.mustIncludeImages}.
     Custom element attachments to honor: ${data.mustIncludeAttachments}.
     Attachment links: ${data.attachmentLinks}.
     Compose for ${data.platforms} with strong focal hierarchy, premium texture clarity, and readable brand details.
@@ -243,6 +272,7 @@ function buildVideoPrompt(data, scene, nextScene, beatText) {
     Keep camera behavior consistent with ${data.camera}.
     Maintain lighting consistency with ${data.lighting}.
     Ensure the segment clearly supports campaign goal: ${data.goal}.
+    Keep download image references visually consistent: ${data.mustIncludeImages}.
     Keep custom elements from attachments consistent: ${data.mustIncludeAttachments}.
     Attachment links: ${data.attachmentLinks}.
     ${transitionLine}`
@@ -256,6 +286,7 @@ function buildFinalMasterPrompt(data) {
     Maintain ${data.categoryLabel} style behavior with ${data.categoryDna}.
     Preserve tone ${data.tone}, style ${data.style}, camera direction ${data.camera}, lighting ${data.lighting}, and environment ${data.environment}.
     Keep all must-include elements visible where relevant: ${data.mustInclude}.
+    Respect image references from Downloads: ${data.mustIncludeImages}.
     Respect custom attachment references: ${data.mustIncludeAttachments}.
     Reference links: ${data.attachmentLinks}.
     Strictly avoid: ${data.mustAvoid}.
@@ -302,6 +333,7 @@ The core objective is ${data.goal}.
 Target audience: ${data.audience}.
 Tone/style direction: ${data.tone}; ${data.style}.
 Customer vision: ${data.vision}
+Images from Downloads: ${data.mustIncludeImages}
 Must-include attachments: ${data.mustIncludeAttachments}
 Attachment links: ${data.attachmentLinks}
 
@@ -353,7 +385,9 @@ function clearForm() {
   byId("finalPromptOutput").textContent = "";
   localStorage.removeItem(STORAGE_KEY);
   selectedAttachmentNames = [];
+  selectedImageAttachmentNames = [];
   updateAttachmentList();
+  updateImageAttachmentList();
 }
 
 function loadDemo() {
@@ -432,9 +466,14 @@ function init() {
     updateAttachmentList();
     saveDraft();
   });
+  byId("mustIncludeImages").addEventListener("change", () => {
+    updateImageAttachmentList();
+    saveDraft();
+  });
 
   loadDraft();
   updateAttachmentList();
+  updateImageAttachmentList();
 }
 
 init();

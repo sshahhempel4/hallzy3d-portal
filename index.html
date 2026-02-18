@@ -129,6 +129,23 @@
           </label>
 
           <label class="full">
+            Attach Images from Downloads (image references)
+            <input
+              id="mustIncludeImages"
+              type="file"
+              multiple
+              accept="image/*"
+            />
+            <span class="field-note">
+              Click and select images directly from your Downloads folder.
+            </span>
+          </label>
+
+          <div id="imageAttachmentList" class="attachment-list full">
+            No image files selected from Downloads.
+          </div>
+
+          <label class="full">
             Attachment Links (Drive/Dropbox/Figma/etc.)
             <input
               id="attachmentLinks"

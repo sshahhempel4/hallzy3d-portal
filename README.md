@@ -4,6 +4,7 @@ This repo contains a simplified website app for your production workflow:
 
 - client fills a short intake
 - client can attach custom reference files in Must Include
+- client can explicitly attach image references from Downloads
 - you generate one final prompt stack
 - you copy from one box and run production
 
