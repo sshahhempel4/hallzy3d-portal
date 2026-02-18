@@ -22,6 +22,9 @@ Each scene includes two complete copy-ready prompts:
 Attachment filenames and attachment links are injected into each scene prompt
 and the final master prompt to keep custom elements traceable.
 
+The customer intake page is plain-English and mostly dropdown-based for
+non-technical users.
+
 ## Files
 
 - `index.html` - simple client intake + one output box

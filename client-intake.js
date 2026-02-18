@@ -90,6 +90,7 @@ CLIENT DETAILS
 - Main Goal: ${readValue("goal")}
 - Target Audience: ${readValue("audience")}
 - Platform(s): ${readValue("platforms")}
+- Compliance Guardrail: ${readValue("compliancePreset")}
 - Creative Category: ${categoryLabel}
 - Desired Video Length (seconds): ${readValue("durationSeconds")}
 

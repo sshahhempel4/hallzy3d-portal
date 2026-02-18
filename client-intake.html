@@ -23,7 +23,7 @@
         <h2>Project Details</h2>
         <p class="muted">
           Mostly dropdowns for quick and simple completion. Use text fields only
-          when needed.
+          when needed. If unsure, pick the closest option and continue.
         </p>
 
         <form id="customerIntakeForm" class="form-grid">
@@ -40,6 +40,9 @@
           <label>
             Product / Service / Subject
             <input id="productName" type="text" placeholder="What are we creating visuals for?" />
+            <span class="field-note">
+              Optional custom name (example: "Blue Dream Live Resin Vape")
+            </span>
           </label>
 
           <label>
@@ -113,6 +116,18 @@
           </label>
 
           <label>
+            Compliance Guardrail
+            <select id="compliancePreset">
+              <option value="">Select one</option>
+              <option value="21+ audience only language">21+ audience only language</option>
+              <option value="No medical cure claims">No medical cure claims</option>
+              <option value="No on-screen consumption">No on-screen consumption</option>
+              <option value="Follow state-safe cannabis ad language">Follow state-safe cannabis ad language</option>
+              <option value="Standard commercial compliance">Standard commercial compliance</option>
+            </select>
+          </label>
+
+          <label>
             Creative Category
             <select id="category">
               <option value="viral_hook">Funny AI Intro / Viral Hook</option>
@@ -165,7 +180,7 @@
           </label>
 
           <label>
-            Camera Direction
+            Camera Feel
             <select id="camera">
               <option value="">Select one</option>
               <option value="Macro close-ups + slow orbit">Macro close-ups + slow orbit</option>
@@ -178,7 +193,7 @@
           </label>
 
           <label>
-            Lighting Direction
+            Lighting Mood
             <select id="lighting">
               <option value="">Select one</option>
               <option value="Soft studio beauty lighting">Soft studio beauty lighting</option>
@@ -191,7 +206,7 @@
           </label>
 
           <label>
-            Environment Direction
+            Scene Location / Environment
             <select id="environment">
               <option value="">Select one</option>
               <option value="Minimal studio set">Minimal studio set</option>
@@ -204,7 +219,7 @@
           </label>
 
           <label>
-            Motion / Pacing
+            Video Speed / Energy
             <select id="motion">
               <option value="">Select one</option>
               <option value="Smooth and elegant pacing">Smooth and elegant pacing</option>
@@ -216,7 +231,7 @@
           </label>
 
           <label>
-            CTA (Call to Action)
+            What should viewers do?
             <select id="cta">
               <option value="">Select one</option>
               <option value="Shop now">Shop now</option>
@@ -230,7 +245,7 @@
           </label>
 
           <label class="full">
-            Must Include Preset
+            What must appear in the video?
             <select id="mustIncludePreset">
               <option value="">Select one</option>
               <option value="Logo + packaging + hero product close-up">Logo + packaging + hero product close-up</option>
@@ -243,7 +258,7 @@
           </label>
 
           <label class="full">
-            Must Include
+            Must Include (optional custom notes)
             <textarea id="mustInclude" rows="2" placeholder="Optional custom must-include notes"></textarea>
           </label>
 
@@ -282,7 +297,7 @@
           </label>
 
           <label class="full">
-            Must Avoid Preset
+            What should we avoid?
             <select id="mustAvoidPreset">
               <option value="">Select one</option>
               <option value="No medical cure claims">No medical cure claims</option>
@@ -295,7 +310,7 @@
           </label>
 
           <label class="full">
-            Must Avoid
+            Must Avoid (optional custom notes)
             <textarea id="mustAvoid" rows="2" placeholder="Optional custom must-avoid notes"></textarea>
           </label>
 
